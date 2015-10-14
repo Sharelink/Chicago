@@ -1,0 +1,17 @@
+﻿{
+  "Data": {
+    "ServerConfig": {
+      "address": "192.168.1.67",
+      "port": 6789,
+      "maxConnection": 1000000
+    },
+
+    "MessagePubSubServer": {
+      "url": "redis://192.168.1.23:6379"
+    },
+
+    "TokenServer": {
+      "url": "redis://192.168.1.23:6379"
+    }
+  }
+}

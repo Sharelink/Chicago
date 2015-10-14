@@ -1,0 +1,603 @@
+{
+  "locked": false,
+  "version": 1,
+  "targets": {
+    "DNX,Version=v4.5.1": {
+      "BahamutCommon/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DBTek.Crypto": "2.1.0",
+          "Newtonsoft.Json": "7.0.1",
+          "ServiceStack.Redis": "4.0.0"
+        }
+      },
+      "BahamutService/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "BahamutCommon": "1.0.0",
+          "DataLevelDefines": "1.0.0"
+        }
+      },
+      "CSharpServerFramework/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "CSharpServerFrameworkAbstract": "1.0.0"
+        }
+      },
+      "CSharpServerFrameworkAbstract/1.0.0": {
+        "type": "project"
+      },
+      "CSServerJsonProtocol/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "CSharpServerFrameworkAbstract": "1.0.0",
+          "Newtonsoft.Json": "7.0.1"
+        }
+      },
+      "DataLevelDefines/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "MongoDB.Driver": "2.0.1",
+          "MySql.Data": "6.9.7",
+          "MySql.Data.Entity": "6.9.7",
+          "MySql.Web": "6.9.7",
+          "ServiceStack.Redis": "4.0.46"
+        }
+      },
+      "DBTek.Crypto/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/DBTek.Crypto.dll": {}
+        },
+        "runtime": {
+          "lib/net45/DBTek.Crypto.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "Microsoft.Dnx.Runtime.Abstractions/1.0.0-beta7": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.Dnx.Runtime.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.Dnx.Runtime.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Framework.Configuration/1.0.0-beta7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta7"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.Framework.Configuration.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.Framework.Configuration.dll": {}
+        }
+      },
+      "Microsoft.Framework.Configuration.Abstractions/1.0.0-beta7": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.Framework.Configuration.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.Framework.Configuration.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Framework.Configuration.EnvironmentVariables/1.0.0-beta7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Framework.Configuration": "1.0.0-beta7"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.Framework.Configuration.EnvironmentVariables.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.Framework.Configuration.EnvironmentVariables.dll": {}
+        }
+      },
+      "Microsoft.Framework.Configuration.Json/1.0.0-beta7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Framework.Configuration": "1.0.0-beta7",
+          "Newtonsoft.Json": "6.0.6"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.Framework.Configuration.Json.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.Framework.Configuration.Json.dll": {}
+        }
+      },
+      "MongoDB.Bson/2.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/MongoDB.Bson.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Bson.dll": {}
+        }
+      },
+      "MongoDB.Driver/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.0.1",
+          "MongoDB.Driver.Core": "2.0.1"
+        },
+        "compile": {
+          "lib/net45/MongoDB.Driver.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Driver.dll": {}
+        }
+      },
+      "MongoDB.Driver.Core/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "MongoDB.Bson": "2.0.1"
+        },
+        "compile": {
+          "lib/net45/MongoDB.Driver.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MongoDB.Driver.Core.dll": {}
+        }
+      },
+      "MySql.Data/6.9.7": {
+        "type": "package",
+        "compile": {
+          "lib/net45/MySql.Data.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MySql.Data.dll": {}
+        }
+      },
+      "MySql.Data.Entity/6.9.7": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "6.0.0",
+          "MySql.Data": "6.9.7"
+        },
+        "compile": {
+          "lib/net45/MySql.Data.Entity.EF6.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MySql.Data.Entity.EF6.dll": {}
+        }
+      },
+      "MySql.Web/6.9.7": {
+        "type": "package",
+        "dependencies": {
+          "MySql.Data": "6.9.7"
+        },
+        "compile": {
+          "lib/net45/MySql.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net45/MySql.Web.dll": {}
+        }
+      },
+      "Newtonsoft.Json/7.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "ServerControlService/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "BahamutCommon": "1.0.0",
+          "DataLevelDefines": "1.0.0"
+        }
+      },
+      "ServiceStack.Common/4.0.46": {
+        "type": "package",
+        "dependencies": {
+          "ServiceStack.Interfaces": "4.0.46",
+          "ServiceStack.Text": "4.0.46"
+        },
+        "compile": {
+          "lib/net40/ServiceStack.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net40/ServiceStack.Common.dll": {}
+        }
+      },
+      "ServiceStack.Interfaces/4.0.46": {
+        "type": "package",
+        "compile": {
+          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
+        },
+        "runtime": {
+          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
+        }
+      },
+      "ServiceStack.Redis/4.0.46": {
+        "type": "package",
+        "dependencies": {
+          "ServiceStack.Common": "4.0.46"
+        },
+        "compile": {
+          "lib/net40/ServiceStack.Redis.dll": {}
+        },
+        "runtime": {
+          "lib/net40/ServiceStack.Redis.dll": {}
+        }
+      },
+      "ServiceStack.Text/4.0.46": {
+        "type": "package",
+        "compile": {
+          "lib/net40/ServiceStack.Text.dll": {}
+        },
+        "runtime": {
+          "lib/net40/ServiceStack.Text.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BahamutCommon/1.0.0": {
+      "type": "project",
+      "path": "../../../BahamutZero/src/BahamutCommon/project.json"
+    },
+    "BahamutService/1.0.0": {
+      "type": "project",
+      "path": "../../../BahamutZero/src/BahamutService/project.json"
+    },
+    "CSharpServerFramework/1.0.0": {
+      "type": "project",
+      "path": "../../../../CSharpServerFramework/CSharpServerFramework/project.json"
+    },
+    "CSharpServerFrameworkAbstract/1.0.0": {
+      "type": "project",
+      "path": "../../../../CSharpServerFramework/CSharpServerFrameworkAbstract/project.json"
+    },
+    "CSServerJsonProtocol/1.0.0": {
+      "type": "project",
+      "path": "../../../../CSharpServerFramework/CSServerJsonProtocol/project.json"
+    },
+    "DataLevelDefines/1.0.0": {
+      "type": "project",
+      "path": "../../../BahamutZero/src/DataLevelDefines/project.json"
+    },
+    "ServerControlService/1.0.0": {
+      "type": "project",
+      "path": "../../../ServerControl/src/ServerControlService/project.json"
+    },
+    "DBTek.Crypto/2.1.0": {
+      "type": "package",
+      "sha512": "qQtFWccOxSub47lxJc8N65TnWe+8rpFhb4iCjoqpTOqxyZuQQUWUD/lCnQyC6vYDHxKeWedog5B0RR37GIr9Tg==",
+      "files": [
+        "DBTek.Crypto.2.1.0.nupkg",
+        "DBTek.Crypto.2.1.0.nupkg.sha512",
+        "DBTek.Crypto.nuspec",
+        "lib/net35/DBTek.Crypto.dll",
+        "lib/net35/DBTek.Crypto.XML",
+        "lib/net40/DBTek.Crypto.dll",
+        "lib/net40/DBTek.Crypto.XML",
+        "lib/net45/DBTek.Crypto.dll",
+        "lib/net45/DBTek.Crypto.XML"
+      ]
+    },
+    "EntityFramework/6.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "2xzFHAF3VVdmTR3//MygtQpwfbDjeaq+nQwCcokLzen7MKHOojPaxNPQPa4diHY1QtcR7zlHAJHNRqPB7W2Syw==",
+      "files": [
+        "content/App.config.transform",
+        "content/Web.config.transform",
+        "EntityFramework.6.1.3.nupkg",
+        "EntityFramework.6.1.3.nupkg.sha512",
+        "EntityFramework.nuspec",
+        "lib/net40/EntityFramework.dll",
+        "lib/net40/EntityFramework.SqlServer.dll",
+        "lib/net40/EntityFramework.SqlServer.xml",
+        "lib/net40/EntityFramework.xml",
+        "lib/net45/EntityFramework.dll",
+        "lib/net45/EntityFramework.SqlServer.dll",
+        "lib/net45/EntityFramework.SqlServer.xml",
+        "lib/net45/EntityFramework.xml",
+        "tools/about_EntityFramework.help.txt",
+        "tools/EntityFramework.PowerShell.dll",
+        "tools/EntityFramework.PowerShell.Utility.dll",
+        "tools/EntityFramework.psd1",
+        "tools/EntityFramework.psm1",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/migrate.exe"
+      ]
+    },
+    "Microsoft.Dnx.Runtime.Abstractions/1.0.0-beta7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "T/aTQeWKnrC35n69MQmqizwhobfpmGJ0iT8x5R1ifEx3ZFHPIu5OB9Iwc5BRhIrY+/+zwikyQJ1fUSa26NfwxA==",
+      "files": [
+        "lib/dnx451/Microsoft.Dnx.Runtime.Abstractions.dll",
+        "lib/dnx451/Microsoft.Dnx.Runtime.Abstractions.xml",
+        "lib/dnxcore50/Microsoft.Dnx.Runtime.Abstractions.dll",
+        "lib/dnxcore50/Microsoft.Dnx.Runtime.Abstractions.xml",
+        "Microsoft.Dnx.Runtime.Abstractions.1.0.0-beta7.nupkg",
+        "Microsoft.Dnx.Runtime.Abstractions.1.0.0-beta7.nupkg.sha512",
+        "Microsoft.Dnx.Runtime.Abstractions.nuspec"
+      ]
+    },
+    "Microsoft.Framework.Configuration/1.0.0-beta7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "l2kMGvDGmLrpWwQz90pKHxuCPA4C5Ds3zWT/bNmt6M/PCM5wxEns/orKHH2m9Cx5H08WZy0FVyQMNQmED126cA==",
+      "files": [
+        "lib/dnx451/Microsoft.Framework.Configuration.dll",
+        "lib/dnx451/Microsoft.Framework.Configuration.xml",
+        "lib/dotnet/Microsoft.Framework.Configuration.dll",
+        "lib/dotnet/Microsoft.Framework.Configuration.xml",
+        "lib/net45/Microsoft.Framework.Configuration.dll",
+        "lib/net45/Microsoft.Framework.Configuration.xml",
+        "Microsoft.Framework.Configuration.1.0.0-beta7.nupkg",
+        "Microsoft.Framework.Configuration.1.0.0-beta7.nupkg.sha512",
+        "Microsoft.Framework.Configuration.nuspec",
+        "repo.json"
+      ]
+    },
+    "Microsoft.Framework.Configuration.Abstractions/1.0.0-beta7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "bLVb0cfwlpIhFmJ2jJzMaOjoG3BGcyP6dtMU1NNzfs3mo1lr2Om5FKWFlYVou3uClM0yNdMtGzu5rQDb2UGxZA==",
+      "files": [
+        "lib/dnx451/Microsoft.Framework.Configuration.Abstractions.dll",
+        "lib/dnx451/Microsoft.Framework.Configuration.Abstractions.xml",
+        "lib/dotnet/Microsoft.Framework.Configuration.Abstractions.dll",
+        "lib/dotnet/Microsoft.Framework.Configuration.Abstractions.xml",
+        "lib/net45/Microsoft.Framework.Configuration.Abstractions.dll",
+        "lib/net45/Microsoft.Framework.Configuration.Abstractions.xml",
+        "Microsoft.Framework.Configuration.Abstractions.1.0.0-beta7.nupkg",
+        "Microsoft.Framework.Configuration.Abstractions.1.0.0-beta7.nupkg.sha512",
+        "Microsoft.Framework.Configuration.Abstractions.nuspec",
+        "repo.json"
+      ]
+    },
+    "Microsoft.Framework.Configuration.EnvironmentVariables/1.0.0-beta7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "6A01+6kwuMLt0/1HWBf16GzQLa5mIppoQBCaUZX2UnRWwzKUT5Q6f8snIDFGDKgviUWGxoUobcWRSOznDhzkvA==",
+      "files": [
+        "lib/dnx451/Microsoft.Framework.Configuration.EnvironmentVariables.dll",
+        "lib/dnx451/Microsoft.Framework.Configuration.EnvironmentVariables.xml",
+        "lib/dotnet/Microsoft.Framework.Configuration.EnvironmentVariables.dll",
+        "lib/dotnet/Microsoft.Framework.Configuration.EnvironmentVariables.xml",
+        "lib/net45/Microsoft.Framework.Configuration.EnvironmentVariables.dll",
+        "lib/net45/Microsoft.Framework.Configuration.EnvironmentVariables.xml",
+        "Microsoft.Framework.Configuration.EnvironmentVariables.1.0.0-beta7.nupkg",
+        "Microsoft.Framework.Configuration.EnvironmentVariables.1.0.0-beta7.nupkg.sha512",
+        "Microsoft.Framework.Configuration.EnvironmentVariables.nuspec",
+        "repo.json"
+      ]
+    },
+    "Microsoft.Framework.Configuration.Json/1.0.0-beta7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "ytBQBly0ISkMDfud7O7y5TZJN6swZjhqZZX2Oe4nbKiAc4J2ucPC2YmbBU/QYAG6lBo/V1hYuv6WO0RObfKDWg==",
+      "files": [
+        "lib/dnx451/Microsoft.Framework.Configuration.Json.dll",
+        "lib/dnx451/Microsoft.Framework.Configuration.Json.xml",
+        "lib/dotnet/Microsoft.Framework.Configuration.Json.dll",
+        "lib/dotnet/Microsoft.Framework.Configuration.Json.xml",
+        "lib/net45/Microsoft.Framework.Configuration.Json.dll",
+        "lib/net45/Microsoft.Framework.Configuration.Json.xml",
+        "Microsoft.Framework.Configuration.Json.1.0.0-beta7.nupkg",
+        "Microsoft.Framework.Configuration.Json.1.0.0-beta7.nupkg.sha512",
+        "Microsoft.Framework.Configuration.Json.nuspec",
+        "repo.json"
+      ]
+    },
+    "MongoDB.Bson/2.0.1": {
+      "type": "package",
+      "sha512": "dr8KYpTt5VIqGWQ5Bzud2BA/lH2csIfL5WLrfc90UzSWGF378ugvEo5tx4J0eZohvHzsRRiMS2YTmJOTRN+iYg==",
+      "files": [
+        "lib/net45/MongoDB.Bson.dll",
+        "lib/net45/MongoDB.Bson.XML",
+        "License.rtf",
+        "MongoDB.Bson.2.0.1.nupkg",
+        "MongoDB.Bson.2.0.1.nupkg.sha512",
+        "MongoDB.Bson.nuspec"
+      ]
+    },
+    "MongoDB.Driver/2.0.1": {
+      "type": "package",
+      "sha512": "awzcHfguHkgLSVniMbDAtKNUNNfEyCrYaErsnCN8ZVAY1R3puD/R/GQRzb1GJDS4vfy+oC4VXAbawxJekt8soA==",
+      "files": [
+        "lib/net45/MongoDB.Driver.dll",
+        "lib/net45/MongoDB.Driver.XML",
+        "License.rtf",
+        "MongoDB.Driver.2.0.1.nupkg",
+        "MongoDB.Driver.2.0.1.nupkg.sha512",
+        "MongoDB.Driver.nuspec"
+      ]
+    },
+    "MongoDB.Driver.Core/2.0.1": {
+      "type": "package",
+      "sha512": "WLHeCKKIFU0XbO6Py8qP/cJqK2aLexaq72EICBHgdwhpqYidqeJuZnDrK/5mnUPRi7bcAtfpcurHfWkjSYHNGg==",
+      "files": [
+        "lib/net45/MongoDB.Driver.Core.dll",
+        "License.rtf",
+        "MongoDB.Driver.Core.2.0.1.nupkg",
+        "MongoDB.Driver.Core.2.0.1.nupkg.sha512",
+        "MongoDB.Driver.Core.nuspec"
+      ]
+    },
+    "MySql.Data/6.9.7": {
+      "type": "package",
+      "sha512": "ugpH3iQUH8HltnG62oUaN/3aeGG56BFeTAh381DjEzz9CSx/99y4rUvWFmt84WhecGi7p0Lh6yWg+QGQ4rgjGQ==",
+      "files": [
+        "CHANGES",
+        "content/app.config.transform",
+        "content/web.config.transform",
+        "lib/net20/MySql.Data.dll",
+        "lib/net20-cf/MySql.Data.CF.dll",
+        "lib/net40/MySql.Data.dll",
+        "lib/net45/MySql.Data.dll",
+        "MySql.Data.6.9.7.nupkg",
+        "MySql.Data.6.9.7.nupkg.sha512",
+        "MySql.Data.nuspec",
+        "Readme.txt"
+      ]
+    },
+    "MySql.Data.Entity/6.9.7": {
+      "type": "package",
+      "sha512": "hYx+WoyysYQ7lt0Ty8ybh1A4zWUON0+7Sj6UxQ3vSWsEww4x1F0ruaGqEOTV8b8T/5ui3NyqXD8x+PN4jzvQFw==",
+      "files": [
+        "CHANGES",
+        "content/app.config.transform",
+        "content/web.config.transform",
+        "lib/net40/MySql.Data.Entity.EF6.dll",
+        "lib/net45/MySql.Data.Entity.EF6.dll",
+        "MySql.Data.Entity.6.9.7.nupkg",
+        "MySql.Data.Entity.6.9.7.nupkg.sha512",
+        "MySql.Data.Entity.nuspec",
+        "Readme.txt"
+      ]
+    },
+    "MySql.Web/6.9.7": {
+      "type": "package",
+      "sha512": "mSiqmcgTzS1pjrsWlcP+8WGjyvLsDHHswTUfdLLsLtXSE1W6ALGWUvBaiMUB9eC3ospFFJrPCG2hiim+NmlVzw==",
+      "files": [
+        "CHANGES",
+        "content/web.config.transform",
+        "lib/net20/MySql.Web.dll",
+        "lib/net40/MySql.Web.dll",
+        "lib/net45/MySql.Web.dll",
+        "MySql.Web.6.9.7.nupkg",
+        "MySql.Web.6.9.7.nupkg.sha512",
+        "MySql.Web.nuspec",
+        "Readme.txt"
+      ]
+    },
+    "Newtonsoft.Json/7.0.1": {
+      "type": "package",
+      "sha512": "q3V4KLetMLnt1gpAVWgtXnHjKs0UG/RalBc29u2ZKxd5t5Ze4JBL5WiiYIklJyK/5CRiIiNwigVQUo0FgbsuWA==",
+      "files": [
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
+        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
+        "Newtonsoft.Json.7.0.1.nupkg",
+        "Newtonsoft.Json.7.0.1.nupkg.sha512",
+        "Newtonsoft.Json.nuspec",
+        "tools/install.ps1"
+      ]
+    },
+    "ServiceStack.Common/4.0.46": {
+      "type": "package",
+      "sha512": "2I881PIoIrvgWTWVW0DFlLG8nLsp5/tzoYr3dyisBzRMH5ZS2hTQVtelWEZg35YWRy8Jb2rZ2IT01ki3QWug9Q==",
+      "files": [
+        "lib/net40/ServiceStack.Common.dll",
+        "lib/net40/ServiceStack.Common.xml",
+        "ServiceStack.Common.4.0.46.nupkg",
+        "ServiceStack.Common.4.0.46.nupkg.sha512",
+        "ServiceStack.Common.nuspec"
+      ]
+    },
+    "ServiceStack.Interfaces/4.0.46": {
+      "type": "package",
+      "sha512": "y8uD8vVyHxfSjy+fwFWTpZpxWqDDSJYggbRVK14rVNxuandEoiDY7H2k4eI8ugEWqe0yAFj+QYiG3IV3aFjszQ==",
+      "files": [
+        "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll",
+        "ServiceStack.Interfaces.4.0.46.nupkg",
+        "ServiceStack.Interfaces.4.0.46.nupkg.sha512",
+        "ServiceStack.Interfaces.nuspec"
+      ]
+    },
+    "ServiceStack.Redis/4.0.46": {
+      "type": "package",
+      "sha512": "BnLDbwJLM+2t/XizHc0gJAiGlq/e2bWTLnJ0ZYK9hPPPYeNPMwYHD5AoQDKGcN2KOs+wcGa4Xjv8gWxPjMhCfw==",
+      "files": [
+        "lib/net40/ServiceStack.Redis.dll",
+        "lib/net40/ServiceStack.Redis.XML",
+        "ServiceStack.Redis.4.0.46.nupkg",
+        "ServiceStack.Redis.4.0.46.nupkg.sha512",
+        "ServiceStack.Redis.nuspec"
+      ]
+    },
+    "ServiceStack.Text/4.0.46": {
+      "type": "package",
+      "sha512": "Zx2aq74+ppqBN32bOn1va2r1uGjBNTcdoAnx/lzHdo5qaeO0/tpNLHCZhO+D7HgAIt2kVlzYeZ9zDTh0eItpnA==",
+      "files": [
+        "lib/net40/ServiceStack.Text.dll",
+        "lib/net40/ServiceStack.Text.xml",
+        "lib/portable-net45+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Text.dll",
+        "lib/sl5/ServiceStack.Text.dll",
+        "lib/sl5/ServiceStack.Text.xml",
+        "ServiceStack.Text.4.0.46.nupkg",
+        "ServiceStack.Text.4.0.46.nupkg.sha512",
+        "ServiceStack.Text.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "BahamutService >= 1.0.0-*",
+      "CSharpServerFramework >= 1.0.0-*",
+      "CSServerJsonProtocol >= 1.0.0-*",
+      "Microsoft.Dnx.Runtime.Abstractions >= 1.0.0-beta7",
+      "Microsoft.Framework.Configuration >= 1.0.0-beta7",
+      "Microsoft.Framework.Configuration.EnvironmentVariables >= 1.0.0-beta7",
+      "Microsoft.Framework.Configuration.Json >= 1.0.0-beta7",
+      "ServerControlService >= 1.0.0-*"
+    ],
+    "DNX,Version=v4.5.1": []
+  }
+}
