@@ -70,22 +70,13 @@ namespace Chicago.Extension
                         UserData = result
                     };
                     session.RegistUser(sharelinker);
-                    var response = new
-                    {
-                        IsValidate = true
-                    };
+                    this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
                     NotificaionCenterExtension.Instance.Subscript(result.UserId, session);
-                    this.SendJsonResponse(session, response, ExtensionName, "Login");
                 }
                 else
                 {
-                    var response = new
-                    {
-                        IsValidate = false
-                    };
-                    this.SendJsonResponse(session, response, ExtensionName, "Login");
+                    this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
                 }
-
             });
         }
 

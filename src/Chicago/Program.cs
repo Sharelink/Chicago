@@ -39,6 +39,7 @@ namespace Chicago
             server.UseExtension(new SharelinkerValidateExtension());
             server.UseExtension(new BahamutAppValidateExtension());
             server.UseExtension(new NotificaionCenterExtension());
+            server.UseExtension(new HeartBeatExtension());
             server.StartServer();
             while (true)
             {

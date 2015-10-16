@@ -33,7 +33,14 @@ namespace Chicago.Extension
                     if (ss != null)
                     {
                         Log("Notified");
-                        this.SendJsonResponse(ss, new { ChatId = message }, ExtensionName, "UsrNewMsg");
+                        if (message.StartsWith( "ChatMessage"))
+                        {
+                            this.SendJsonResponse(ss, new { ChatId = message.Replace("ChatMessage:","") }, ExtensionName, "UsrNewMsg");
+                        }
+                        else if (message.StartsWith("LinkMessage"))
+                        {
+                            this.SendJsonResponse(ss, new { }, ExtensionName, "UsrNewLinkMsg");
+                        }
                     }
                 };
                 subscription.SubscribeToChannels(userId);
