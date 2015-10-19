@@ -40,6 +40,9 @@ namespace Chicago.Extension
                         else if (message.StartsWith("LinkMessage"))
                         {
                             this.SendJsonResponse(ss, new { }, ExtensionName, "UsrNewLinkMsg");
+                        }else if(message.StartsWith("ShareThingMessage"))
+                        {
+                            this.SendJsonResponse(ss, new { ShareId = message.Replace("ShareThingMessage:", "") }, ExtensionName, "UsrNewSTMsg");
                         }
                     }
                 };
