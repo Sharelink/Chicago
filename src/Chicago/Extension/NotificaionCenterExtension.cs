@@ -19,12 +19,11 @@ namespace Chicago.Extension
             {
                 subscription.OnUnSubscribe = channel =>
                 {
-                    subscriptionMap.Remove(userId);
                 };
 
                 subscription.OnSubscribe = channel =>
                 {
-                    subscriptionMap[userId] = session;
+                    subscriptionMap[channel] = session;
                 };
 
                 subscription.OnMessage = (channel, message) =>
@@ -32,8 +31,11 @@ namespace Chicago.Extension
                     var ss = subscriptionMap[channel];
                     if (ss != null)
                     {
-                        Log("Notified");
-                        if (message.StartsWith( "ChatMessage"))
+                        if (message == "UnSubscribe")
+                        {
+                            subscriptionMap.Remove(channel);
+                            subscription.UnSubscribeFromChannels(channel);
+                        }else if (message.StartsWith( "ChatMessage"))
                         {
                             this.SendJsonResponse(ss, new { ChatId = message.Replace("ChatMessage:","") }, ExtensionName, "UsrNewMsg");
                         }
@@ -42,7 +44,7 @@ namespace Chicago.Extension
                             this.SendJsonResponse(ss, new { }, ExtensionName, "UsrNewLinkMsg");
                         }else if(message.StartsWith("ShareThingMessage"))
                         {
-                            this.SendJsonResponse(ss, new { ShareId = message.Replace("ShareThingMessage:", "") }, ExtensionName, "UsrNewSTMsg");
+                            this.SendJsonResponse(ss, new { }, ExtensionName, "UsrNewSTMsg");
                         }
                     }
                 };
@@ -65,10 +67,11 @@ namespace Chicago.Extension
                 var sharelinker = session.User as Sharelinker;
                 if (sharelinker != null)
                 {
-                    using (var subscription = ChicagoServer.MessagePubSubServerClientManager.GetClient().CreateSubscription())
+                    using (var psClient = ChicagoServer.MessagePubSubServerClientManager.GetClient())
                     {
-                        subscriptionMap.Remove(sharelinker.UserData.UserId);
-                        subscription.UnSubscribeFromChannels(sharelinker.UserData.UserId);
+                        var userId = sharelinker.UserData.UserId;
+                        
+                        psClient.PublishMessage(userId, "UnSubscribe");
                     }
                 }
             }
