@@ -7,14 +7,14 @@
   "licenseUrl": "",
 
   "dependencies": {
+    "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-*",
+    "Microsoft.Framework.Configuration": "1.0.0-*",
+    "Microsoft.Framework.Configuration.EnvironmentVariables": "1.0.0-*",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-*",
+    "ServerControlService": "1.0.0-*",
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",
-    "CSServerJsonProtocol": "1.0.0-*",
-    "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-beta7",
-    "Microsoft.Framework.Configuration": "1.0.0-beta7",
-    "Microsoft.Framework.Configuration.EnvironmentVariables": "1.0.0-beta7",
-    "Microsoft.Framework.Configuration.Json": "1.0.0-beta7",
-    "ServerControlService": "1.0.0-*"
+    "CSServerJsonProtocol": "1.0.0-*"
   },
 
   "commands": {

@@ -1,16 +1,73 @@
 {
   "locked": false,
-  "version": 1,
+  "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
       "CSharpClientFramework/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
       },
       "CSharpServerFrameworkAbstract/1.0.0": {
-        "type": "project"
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
       },
       "CSServerJsonProtocol/1.0.0": {
         "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "CSharpServerFrameworkAbstract": "1.0.0",
+          "Newtonsoft.Json": "7.0.1"
+        }
+      },
+      "Newtonsoft.Json/7.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x86": {
+      "CSharpClientFramework/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "CSharpServerFrameworkAbstract/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "CSServerJsonProtocol/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "CSharpServerFrameworkAbstract": "1.0.0",
+          "Newtonsoft.Json": "7.0.1"
+        }
+      },
+      "Newtonsoft.Json/7.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x64": {
+      "CSharpClientFramework/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "CSharpServerFrameworkAbstract/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1"
+      },
+      "CSServerJsonProtocol/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "CSharpServerFrameworkAbstract": "1.0.0",
           "Newtonsoft.Json": "7.0.1"

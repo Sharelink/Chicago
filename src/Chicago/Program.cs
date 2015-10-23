@@ -20,8 +20,9 @@ namespace Chicago
         public static IConfiguration Configuration { get; private set; }
         public Program(IApplicationEnvironment appEnv)
         {
-            var conBuilder = new ConfigurationBuilder(appEnv.ApplicationBasePath);
+            var conBuilder = new ConfigurationBuilder();
             conBuilder
+                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json")
                 .AddEnvironmentVariables();
             Configuration = conBuilder.Build();
