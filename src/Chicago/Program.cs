@@ -101,7 +101,7 @@ namespace Chicago
 
         public IPAddress GetServerBindIP()
         {
-            return IPAddress.Parse(Program.Configuration["Data:ServerConfig:address"]);
+            return IPAddress.Parse(Program.Configuration["Data:ServerConfig:host"]);
         }
     }
 }

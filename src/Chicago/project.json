@@ -1,8 +1,8 @@
 {
   "version": "1.0.0-*",
   "description": "Chicago Console Application",
-  "authors": [ "cplov" ],
-  "tags": [ "" ],
+  "authors": "cplov" ,
+  "tags": "",
   "projectUrl": "",
   "licenseUrl": "",
 

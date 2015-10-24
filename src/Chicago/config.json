@@ -1,17 +1,21 @@
 ﻿{
   "Data": {
     "ServerConfig": {
-      "address": "192.168.1.67",
+      "host": "chicago.sharelink.online",
       "port": 6789,
       "maxConnection": 1000000
     },
-
+    "App": {
+      "appname": "ChicagoServer",
+      "appkey": "e1c91545bdb803aaeba2f5d4c86308327b93a2e2",
+      "url": "chicago://chicago.sharelink.online:6789"
+    },
     "MessagePubSubServer": {
-      "url": "redis://192.168.1.23:6379"
+      "url": "redis://pubsub.sharelink.online:6379"
     },
 
     "TokenServer": {
-      "url": "redis://192.168.1.23:6379"
+      "url": "redis://token.sharelink.online:6379"
     }
   }
 }
