@@ -101,7 +101,25 @@ namespace Chicago
 
         public IPAddress GetServerBindIP()
         {
-            return IPAddress.Parse(Program.Configuration["Data:ServerConfig:host"]);
+            var host = Program.Configuration["Data:ServerConfig:host"];
+            try
+            {
+                return IPAddress.Parse(host);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    var ip = Dns.GetHostEntry(host).AddressList.First();
+                    return ip;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                
+            }
+            
         }
     }
 }

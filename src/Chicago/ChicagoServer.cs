@@ -23,8 +23,6 @@ namespace Chicago
 
         protected override void ServerInit()
         {
-            var key = AppkeyUtil.GenerateAppkey("Chicago");
-            Console.WriteLine(key);
             base.ServerInit();
             Instance = this;
         }
