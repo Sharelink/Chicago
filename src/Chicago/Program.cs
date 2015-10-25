@@ -44,11 +44,7 @@ namespace Chicago
             server.StartServer();
             while (true)
             {
-                var line = Console.ReadLine();
-                if (line == "exit")
-                {
-                    break;  
-                }
+                Thread.Sleep(int.MaxValue);
             }
         }
     }
