@@ -8,7 +8,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
-          "Newtonsoft.Json": "7.0.1"
+          "Newtonsoft.Json": "7.0.1",
+          "PasswordHash": "1.1.0"
         }
       },
       "BahamutService/1.0.0": {
@@ -46,7 +47,6 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "MySql.Web": "6.9.7",
           "ServiceStack.Redis": "4.0.46"
         }
       },
@@ -233,18 +233,6 @@
           "lib/net45/MySql.Data.Entity.EF6.dll": {}
         }
       },
-      "MySql.Web/6.9.7": {
-        "type": "package",
-        "dependencies": {
-          "MySql.Data": "6.9.7"
-        },
-        "compile": {
-          "lib/net45/MySql.Web.dll": {}
-        },
-        "runtime": {
-          "lib/net45/MySql.Web.dll": {}
-        }
-      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -252,6 +240,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "PasswordHash/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/PasswordHash.dll": {}
+        },
+        "runtime": {
+          "lib/net40/PasswordHash.dll": {}
         }
       },
       "ServerControlService/1.0.0": {
@@ -312,7 +309,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
-          "Newtonsoft.Json": "7.0.1"
+          "Newtonsoft.Json": "7.0.1",
+          "PasswordHash": "1.1.0"
         }
       },
       "BahamutService/1.0.0": {
@@ -350,7 +348,6 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "MySql.Web": "6.9.7",
           "ServiceStack.Redis": "4.0.46"
         }
       },
@@ -537,18 +534,6 @@
           "lib/net45/MySql.Data.Entity.EF6.dll": {}
         }
       },
-      "MySql.Web/6.9.7": {
-        "type": "package",
-        "dependencies": {
-          "MySql.Data": "6.9.7"
-        },
-        "compile": {
-          "lib/net45/MySql.Web.dll": {}
-        },
-        "runtime": {
-          "lib/net45/MySql.Web.dll": {}
-        }
-      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -556,6 +541,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "PasswordHash/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/PasswordHash.dll": {}
+        },
+        "runtime": {
+          "lib/net40/PasswordHash.dll": {}
         }
       },
       "ServerControlService/1.0.0": {
@@ -616,7 +610,8 @@
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
-          "Newtonsoft.Json": "7.0.1"
+          "Newtonsoft.Json": "7.0.1",
+          "PasswordHash": "1.1.0"
         }
       },
       "BahamutService/1.0.0": {
@@ -654,7 +649,6 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "MySql.Web": "6.9.7",
           "ServiceStack.Redis": "4.0.46"
         }
       },
@@ -841,18 +835,6 @@
           "lib/net45/MySql.Data.Entity.EF6.dll": {}
         }
       },
-      "MySql.Web/6.9.7": {
-        "type": "package",
-        "dependencies": {
-          "MySql.Data": "6.9.7"
-        },
-        "compile": {
-          "lib/net45/MySql.Web.dll": {}
-        },
-        "runtime": {
-          "lib/net45/MySql.Web.dll": {}
-        }
-      },
       "Newtonsoft.Json/7.0.1": {
         "type": "package",
         "compile": {
@@ -860,6 +842,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "PasswordHash/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/PasswordHash.dll": {}
+        },
+        "runtime": {
+          "lib/net40/PasswordHash.dll": {}
         }
       },
       "ServerControlService/1.0.0": {
@@ -1154,21 +1145,6 @@
         "Readme.txt"
       ]
     },
-    "MySql.Web/6.9.7": {
-      "type": "package",
-      "sha512": "mSiqmcgTzS1pjrsWlcP+8WGjyvLsDHHswTUfdLLsLtXSE1W6ALGWUvBaiMUB9eC3ospFFJrPCG2hiim+NmlVzw==",
-      "files": [
-        "CHANGES",
-        "content/web.config.transform",
-        "lib/net20/MySql.Web.dll",
-        "lib/net40/MySql.Web.dll",
-        "lib/net45/MySql.Web.dll",
-        "MySql.Web.6.9.7.nupkg",
-        "MySql.Web.6.9.7.nupkg.sha512",
-        "MySql.Web.nuspec",
-        "Readme.txt"
-      ]
-    },
     "Newtonsoft.Json/7.0.1": {
       "type": "package",
       "sha512": "q3V4KLetMLnt1gpAVWgtXnHjKs0UG/RalBc29u2ZKxd5t5Ze4JBL5WiiYIklJyK/5CRiIiNwigVQUo0FgbsuWA==",
@@ -1189,6 +1165,16 @@
         "Newtonsoft.Json.7.0.1.nupkg.sha512",
         "Newtonsoft.Json.nuspec",
         "tools/install.ps1"
+      ]
+    },
+    "PasswordHash/1.1.0": {
+      "type": "package",
+      "sha512": "BQBNiHTSpWa7wHoy6BH+UPk1SYefqSSng9I4uxlPXjrtVG7Nwum/2DrtZ+AVKjmuD/HuLmo9h9+WprPo8nowBQ==",
+      "files": [
+        "lib/net40/PasswordHash.dll",
+        "PasswordHash.1.1.0.nupkg",
+        "PasswordHash.1.1.0.nupkg.sha512",
+        "PasswordHash.nuspec"
       ]
     },
     "ServiceStack.Common/4.0.46": {
