@@ -1,11 +1,7 @@
 {
-  "version": "1.0.0-*",
-  "description": "Chicago Console Application",
-  "authors": "cplov" ,
-  "tags": "",
-  "projectUrl": "",
-  "licenseUrl": "",
-
+  "commands": {
+    "Chicago": "Chicago"
+  },
   "dependencies": {
     "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-*",
     "Microsoft.Framework.Configuration": "1.0.0-*",
@@ -14,14 +10,16 @@
     "ServerControlService": "1.0.0-*",
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",
-    "CSServerJsonProtocol": "1.0.0-*"
-  },
-
-  "commands": {
-    "Chicago": "Chicago"
+    "CSServerJsonProtocol": "1.0.0-*",
+    "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-*",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-*"
   },
 
   "frameworks": {
     "dnx451": { }
-  }
+  },
+  "licenseUrl": "",
+  "projectUrl": "",
+  "tags": "",
+  "version": "1.0.0-*"
 }

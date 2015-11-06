@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Chicago": {
+      "commandName": "Chicago",
+      "environmentVariables": {
+        "ASPNET_ENV": "Development"
+      }
+    }
+  }
+}

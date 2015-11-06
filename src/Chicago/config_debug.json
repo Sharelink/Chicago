@@ -1,13 +1,13 @@
 ﻿{
   "Data": {
     "ServerConfig": {
-      "host": "chicago.sharelink.online",
+      "host": "192.168.1.168",
       "port": 6789,
       "maxConnection": 1000000
     },
 
     "LogConfig": {
-      "logPath": "~/logs/chicago.log"
+      "logPath": "C:/logs/chicago.log"
     },
 
     "NetConfig": {
@@ -22,7 +22,7 @@
     "App": {
       "appname": "ChicagoServer",
       "appkey": "e1c91545bdb803aaeba2f5d4c86308327b93a2e2",
-      "url": "chicago://chicago.sharelink.online:6789"
+      "url": "chicago://192.168.1.168:6789"
     },
     "MessagePubSubServer": {
       "url": "redis://pubsub.sharelink.online:6379"

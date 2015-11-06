@@ -12,30 +12,41 @@ using CSharpServerFramework.Log;
 using CSServerJsonProtocol;
 using System.Threading;
 using CSharpServerFramework;
+using Microsoft.AspNet.Hosting;
+using Microsoft.Framework.DependencyInjection;
+using Microsoft.AspNet.Builder;
 
 namespace Chicago
 {
     public class Program
     {
         public static IConfiguration Configuration { get; private set; }
+        public static ChicagoServer Server { get; private set; }
         public Program(IApplicationEnvironment appEnv)
         {
             var conBuilder = new ConfigurationBuilder();
-            conBuilder
-                .SetBasePath(appEnv.ApplicationBasePath)
-                .AddJsonFile("config.json")
-                .AddEnvironmentVariables();
+            conBuilder.SetBasePath(appEnv.ApplicationBasePath).AddEnvironmentVariables();
+#if DEBUG
+            conBuilder.AddJsonFile("config_debug.json");
+#else
+            conBuilder.AddJsonFile("config.json");
+#endif
             Configuration = conBuilder.Build();
-
             
         }
 
         public void Main(string[] args)
         {
             var server = new ChicagoServer();
+            Server = server;
             server.UseNetConfig(new NetConfigReader());
             server.UseServerConfig(new ServerConfigReader());
-            server.UseLogger(ConsoleLogger.Instance);
+#if DEBUG
+                server.UseLogger(ConsoleLogger.Instance);
+                server.UseLogger(new FileLogger(Configuration["Data:LogConfig:logPath"]));
+#else
+                server.UseLogger(new FileLogger(Configuration["Data:LogConfig:logPath"]));
+#endif
             server.UseMessageRoute(new JsonRouteFilter());
             server.UseExtension(new SharelinkerValidateExtension());
             server.UseExtension(new BahamutAppValidateExtension());
@@ -53,33 +64,32 @@ namespace Chicago
     {
         public uint GetBufferAddPerTimeCount()
         {
-            return 2048;
+            return uint.Parse(Program.Configuration["Data:NetConfig:addBufferCountPerTime"]);
         }
 
         public uint GetBufferInitCount()
         {
-            return 1024;
+            return uint.Parse(Program.Configuration["Data:NetConfig:bufferInitCount"]);
         }
 
         public int GetBufferSize()
         {
-            return 8 * 1024;
+            return int.Parse(Program.Configuration["Data:NetConfig:bufferSize"]);
         }
 
         public int GetNetTimeOut()
         {
-            return 15 * 1000;
+            return int.Parse(Program.Configuration["Data:NetConfig:clientTimeOut"]);
         }
 
         public uint GetValidateTimeout()
         {
-            //7 mins
-            return 1000 * 60 * 7;
+            return uint.Parse(Program.Configuration["Data:NetConfig:validateTimeOut"]);
         }
 
         public int GetWorkerThreadCount()
         {
-            return 2;
+            return int.Parse(Program.Configuration["Data:NetConfig:workerThread"]);
         }
     }
 
