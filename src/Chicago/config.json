@@ -7,7 +7,7 @@
     },
 
     "LogConfig": {
-      "logPath": "~/logs/chicago.log"
+      "logPath": "/home/deployment/logs/chicago.log"
     },
 
     "NetConfig": {

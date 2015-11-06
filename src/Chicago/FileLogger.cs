@@ -12,7 +12,8 @@ namespace Chicago
         public StreamWriter LogFileWriter { get; private set; }
         public FileLogger(string path)
         {
-            LogFileWriter = new StreamWriter(File.Open(path, FileMode.Append));
+            var stream = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read);
+            LogFileWriter = new StreamWriter(stream);
             LogFileWriter.AutoFlush = true;
         }
         public void Log(string LogString)

@@ -1,7 +1,13 @@
 {
-  "commands": {
-    "Chicago": "Chicago"
+  "licenseUrl": "",
+  "projectUrl": "",
+  "tags": "",
+  "version": "1.0.0-*",
+
+  "frameworks": {
+    "dnx451": { }
   },
+
   "dependencies": {
     "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-*",
     "Microsoft.Framework.Configuration": "1.0.0-*",
@@ -15,11 +21,7 @@
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-*"
   },
 
-  "frameworks": {
-    "dnx451": { }
-  },
-  "licenseUrl": "",
-  "projectUrl": "",
-  "tags": "",
-  "version": "1.0.0-*"
+  "commands": {
+    "Chicago": "Chicago"
+  }
 }
