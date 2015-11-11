@@ -2,12 +2,12 @@
   "Data": {
     "ServerConfig": {
       "host": "192.168.1.168",
-      "port": 6789,
+      "port": 9657,
       "maxConnection": 1000000
     },
 
     "Log": {
-      "logFile": "C:/logs/Chicago/6789.log"
+      "logFile": "C:/logs/Chicago/9657.log"
     },
 
     "NetConfig": {

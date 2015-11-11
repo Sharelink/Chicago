@@ -2,12 +2,12 @@
   "Data": {
     "ServerConfig": {
       "host": "chicago.sharelink.online",
-      "port": 6789,
+      "port": 9657,
       "maxConnection": 1000000
     },
 
     "Log": {
-      "logFile": "/home/deployment/logs/Chicago/6789.log"
+      "logFile": "/home/deployment/logs/Chicago/9657.log"
     },
 
     "NetConfig": {
