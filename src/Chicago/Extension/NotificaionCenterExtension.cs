@@ -19,11 +19,14 @@ namespace Chicago.Extension
             {
                 subscription.OnUnSubscribe = channel =>
                 {
+                    Log(string.Format("OnUnSubscribe User:{0}", channel));
                 };
 
                 subscription.OnSubscribe = channel =>
                 {
+                    Log(string.Format("OnSubscribe User:{0}", channel));
                     subscriptionMap[channel] = session;
+                    Log(string.Format("Chicago Instance Online Users:{0}", subscriptionMap.Count));
                 };
 
                 subscription.OnMessage = (channel, message) =>

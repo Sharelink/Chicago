@@ -9,6 +9,7 @@
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
           "Newtonsoft.Json": "7.0.1",
+          "NLog": "4.2.0",
           "PasswordHash": "1.1.0"
         }
       },
@@ -48,7 +49,10 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "ServiceStack.Redis": "4.0.46"
+          "ServiceStack": "3.9.71",
+          "ServiceStack.Common": "3.9.71",
+          "ServiceStack.Redis": "3.9.71",
+          "ServiceStack.Text": "3.9.71"
         }
       },
       "DBTek.Crypto/2.1.0": {
@@ -625,6 +629,15 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "NLog/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NLog.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NLog.dll": {}
+        }
+      },
       "PasswordHash/1.1.0": {
         "type": "package",
         "compile": {
@@ -642,47 +655,70 @@
           "DataLevelDefines": "1.0.0"
         }
       },
-      "ServiceStack.Common/4.0.46": {
+      "ServiceStack/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Interfaces": "4.0.46",
-          "ServiceStack.Text": "4.0.46"
+          "ServiceStack.Common": "[3.0.0, 4.0.0)",
+          "ServiceStack.OrmLite.SqlServer": "[3.0.0, 4.0.0)",
+          "ServiceStack.Redis": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         }
       },
-      "ServiceStack.Interfaces/4.0.46": {
-        "type": "package",
-        "compile": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        },
-        "runtime": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        }
-      },
-      "ServiceStack.Redis/4.0.46": {
+      "ServiceStack.Common/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Common": "4.0.46"
+          "ServiceStack.Text": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         }
       },
-      "ServiceStack.Text/4.0.46": {
+      "ServiceStack.OrmLite.SqlServer/3.0.3": {
         "type": "package",
         "compile": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
+        }
+      },
+      "ServiceStack.Redis/3.9.71": {
+        "type": "package",
+        "dependencies": {
+          "ServiceStack.Common": "[3.0.0, 4.0.0)"
+        },
+        "compile": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        }
+      },
+      "ServiceStack.Text/3.9.71": {
+        "type": "package",
+        "compile": {
+          "lib/net35/ServiceStack.Text.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Text.dll": {}
         }
       },
       "System.Diagnostics.Tracing.Telemetry/4.0.0-beta-23409": {
@@ -766,6 +802,7 @@
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
           "Newtonsoft.Json": "7.0.1",
+          "NLog": "4.2.0",
           "PasswordHash": "1.1.0"
         }
       },
@@ -805,7 +842,10 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "ServiceStack.Redis": "4.0.46"
+          "ServiceStack": "3.9.71",
+          "ServiceStack.Common": "3.9.71",
+          "ServiceStack.Redis": "3.9.71",
+          "ServiceStack.Text": "3.9.71"
         }
       },
       "DBTek.Crypto/2.1.0": {
@@ -1385,6 +1425,15 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "NLog/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NLog.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NLog.dll": {}
+        }
+      },
       "PasswordHash/1.1.0": {
         "type": "package",
         "compile": {
@@ -1402,47 +1451,70 @@
           "DataLevelDefines": "1.0.0"
         }
       },
-      "ServiceStack.Common/4.0.46": {
+      "ServiceStack/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Interfaces": "4.0.46",
-          "ServiceStack.Text": "4.0.46"
+          "ServiceStack.Common": "[3.0.0, 4.0.0)",
+          "ServiceStack.OrmLite.SqlServer": "[3.0.0, 4.0.0)",
+          "ServiceStack.Redis": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         }
       },
-      "ServiceStack.Interfaces/4.0.46": {
-        "type": "package",
-        "compile": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        },
-        "runtime": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        }
-      },
-      "ServiceStack.Redis/4.0.46": {
+      "ServiceStack.Common/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Common": "4.0.46"
+          "ServiceStack.Text": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         }
       },
-      "ServiceStack.Text/4.0.46": {
+      "ServiceStack.OrmLite.SqlServer/3.0.3": {
         "type": "package",
         "compile": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
+        }
+      },
+      "ServiceStack.Redis/3.9.71": {
+        "type": "package",
+        "dependencies": {
+          "ServiceStack.Common": "[3.0.0, 4.0.0)"
+        },
+        "compile": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        }
+      },
+      "ServiceStack.Text/3.9.71": {
+        "type": "package",
+        "compile": {
+          "lib/net35/ServiceStack.Text.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Text.dll": {}
         }
       },
       "System.Diagnostics.Tracing.Telemetry/4.0.0-beta-23409": {
@@ -1526,6 +1598,7 @@
         "dependencies": {
           "DBTek.Crypto": "2.1.0",
           "Newtonsoft.Json": "7.0.1",
+          "NLog": "4.2.0",
           "PasswordHash": "1.1.0"
         }
       },
@@ -1565,7 +1638,10 @@
           "MongoDB.Driver": "2.1.0",
           "MySql.Data": "6.9.7",
           "MySql.Data.Entity": "6.9.7",
-          "ServiceStack.Redis": "4.0.46"
+          "ServiceStack": "3.9.71",
+          "ServiceStack.Common": "3.9.71",
+          "ServiceStack.Redis": "3.9.71",
+          "ServiceStack.Text": "3.9.71"
         }
       },
       "DBTek.Crypto/2.1.0": {
@@ -2145,6 +2221,15 @@
           "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
+      "NLog/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/NLog.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NLog.dll": {}
+        }
+      },
       "PasswordHash/1.1.0": {
         "type": "package",
         "compile": {
@@ -2162,47 +2247,70 @@
           "DataLevelDefines": "1.0.0"
         }
       },
-      "ServiceStack.Common/4.0.46": {
+      "ServiceStack/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Interfaces": "4.0.46",
-          "ServiceStack.Text": "4.0.46"
+          "ServiceStack.Common": "[3.0.0, 4.0.0)",
+          "ServiceStack.OrmLite.SqlServer": "[3.0.0, 4.0.0)",
+          "ServiceStack.Redis": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Common.dll": {}
+          "lib/net35/ServiceStack.dll": {},
+          "lib/net35/ServiceStack.ServiceInterface.dll": {}
         }
       },
-      "ServiceStack.Interfaces/4.0.46": {
-        "type": "package",
-        "compile": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        },
-        "runtime": {
-          "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll": {}
-        }
-      },
-      "ServiceStack.Redis/4.0.46": {
+      "ServiceStack.Common/3.9.71": {
         "type": "package",
         "dependencies": {
-          "ServiceStack.Common": "4.0.46"
+          "ServiceStack.Text": "[3.0.0, 4.0.0)"
         },
         "compile": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Redis.dll": {}
+          "lib/net35/ServiceStack.Common.dll": {},
+          "lib/net35/ServiceStack.Interfaces.dll": {}
         }
       },
-      "ServiceStack.Text/4.0.46": {
+      "ServiceStack.OrmLite.SqlServer/3.0.3": {
         "type": "package",
         "compile": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
         },
         "runtime": {
-          "lib/net40/ServiceStack.Text.dll": {}
+          "lib/ServiceStack.Common.dll": {},
+          "lib/ServiceStack.OrmLite.dll": {},
+          "lib/ServiceStack.OrmLite.SqlServer.dll": {},
+          "lib/ServiceStack.Text.dll": {}
+        }
+      },
+      "ServiceStack.Redis/3.9.71": {
+        "type": "package",
+        "dependencies": {
+          "ServiceStack.Common": "[3.0.0, 4.0.0)"
+        },
+        "compile": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Redis.dll": {}
+        }
+      },
+      "ServiceStack.Text/3.9.71": {
+        "type": "package",
+        "compile": {
+          "lib/net35/ServiceStack.Text.dll": {}
+        },
+        "runtime": {
+          "lib/net35/ServiceStack.Text.dll": {}
         }
       },
       "System.Diagnostics.Tracing.Telemetry/4.0.0-beta-23409": {
@@ -2881,6 +2989,25 @@
         "tools/install.ps1"
       ]
     },
+    "NLog/4.2.0": {
+      "type": "package",
+      "sha512": "XlbVY/dAJkcyiqdIznqb5Pd7COhP04o3KVGnTBAEhpEqZbRo4EoAkHTiygWgXY0DZjzloREctn5lyHFzFn7L5A==",
+      "files": [
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net40/NLog.dll",
+        "lib/net40/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/sl4/NLog.dll",
+        "lib/sl4/NLog.xml",
+        "lib/sl5/NLog.dll",
+        "lib/sl5/NLog.xml",
+        "NLog.4.2.0.nupkg",
+        "NLog.4.2.0.nupkg.sha512",
+        "NLog.nuspec"
+      ]
+    },
     "PasswordHash/1.1.0": {
       "type": "package",
       "sha512": "BQBNiHTSpWa7wHoy6BH+UPk1SYefqSSng9I4uxlPXjrtVG7Nwum/2DrtZ+AVKjmuD/HuLmo9h9+WprPo8nowBQ==",
@@ -2891,49 +3018,79 @@
         "PasswordHash.nuspec"
       ]
     },
-    "ServiceStack.Common/4.0.46": {
+    "ServiceStack/3.9.71": {
       "type": "package",
-      "sha512": "2I881PIoIrvgWTWVW0DFlLG8nLsp5/tzoYr3dyisBzRMH5ZS2hTQVtelWEZg35YWRy8Jb2rZ2IT01ki3QWug9Q==",
+      "sha512": "G6shF+9Wc8yO32vpiLCXP9zl0F2d4pDxaNmtFl4QpQMUSPdD589DRWQm9xfg/k4g2K9ANjOAAecZcAFi9SsDNQ==",
       "files": [
-        "lib/net40/ServiceStack.Common.dll",
-        "lib/net40/ServiceStack.Common.xml",
-        "ServiceStack.Common.4.0.46.nupkg",
-        "ServiceStack.Common.4.0.46.nupkg.sha512",
+        "lib/net35/ServiceStack.dll",
+        "lib/net35/ServiceStack.ServiceInterface.dll",
+        "lib/net35/ServiceStack.xml",
+        "ServiceStack.3.9.71.nupkg",
+        "ServiceStack.3.9.71.nupkg.sha512",
+        "ServiceStack.nuspec"
+      ]
+    },
+    "ServiceStack.Common/3.9.71": {
+      "type": "package",
+      "sha512": "t1OPES9kUwtuhvVBRd9MZyOX0WgAMX2WO/mbmzBXFptofoep5vxGBBu5xg+TGeMzc9o+lA1YpOfQCZoCeMn0+g==",
+      "files": [
+        "lib/net35/ServiceStack.Common.dll",
+        "lib/net35/ServiceStack.Common.XML",
+        "lib/net35/ServiceStack.Interfaces.dll",
+        "lib/net35/ServiceStack.Interfaces.xml",
+        "lib/sl4/README.txt",
+        "lib/sl5/README.txt",
+        "lib/sl5/ServiceStack.Common.dll",
+        "lib/sl5/ServiceStack.Common.xml",
+        "lib/sl5/ServiceStack.Interfaces.dll",
+        "lib/sl5/ServiceStack.Interfaces.xml",
+        "ServiceStack.Common.3.9.71.nupkg",
+        "ServiceStack.Common.3.9.71.nupkg.sha512",
         "ServiceStack.Common.nuspec"
       ]
     },
-    "ServiceStack.Interfaces/4.0.46": {
+    "ServiceStack.OrmLite.SqlServer/3.0.3": {
       "type": "package",
-      "sha512": "y8uD8vVyHxfSjy+fwFWTpZpxWqDDSJYggbRVK14rVNxuandEoiDY7H2k4eI8ugEWqe0yAFj+QYiG3IV3aFjszQ==",
+      "sha512": "CriNtl7pXs7YOJlZ08pBfS+LD7BDHW8DUbJLen8JM9HP3ThUMx29VfUVhdiikExErhF8BNkLBP5a30MgVveogQ==",
       "files": [
-        "lib/portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Interfaces.dll",
-        "ServiceStack.Interfaces.4.0.46.nupkg",
-        "ServiceStack.Interfaces.4.0.46.nupkg.sha512",
-        "ServiceStack.Interfaces.nuspec"
+        "lib/ServiceStack.Common.dll",
+        "lib/ServiceStack.Common.pdb",
+        "lib/ServiceStack.OrmLite.dll",
+        "lib/ServiceStack.OrmLite.pdb",
+        "lib/ServiceStack.OrmLite.SqlServer.dll",
+        "lib/ServiceStack.OrmLite.SqlServer.pdb",
+        "lib/ServiceStack.Text.dll",
+        "lib/ServiceStack.Text.pdb",
+        "ServiceStack.OrmLite.SqlServer.3.0.3.nupkg",
+        "ServiceStack.OrmLite.SqlServer.3.0.3.nupkg.sha512",
+        "ServiceStack.OrmLite.SqlServer.nuspec"
       ]
     },
-    "ServiceStack.Redis/4.0.46": {
+    "ServiceStack.Redis/3.9.71": {
       "type": "package",
-      "sha512": "BnLDbwJLM+2t/XizHc0gJAiGlq/e2bWTLnJ0ZYK9hPPPYeNPMwYHD5AoQDKGcN2KOs+wcGa4Xjv8gWxPjMhCfw==",
+      "sha512": "+JR9xUX5Ksp5Wnd1x0EZ9O2V3f7dOiT8waQGIi0NHWUH1NVaR1js3Gl37xZHC5lqCqBwyDSsqpKRknPfMTxKtQ==",
       "files": [
-        "lib/net40/ServiceStack.Redis.dll",
-        "lib/net40/ServiceStack.Redis.XML",
-        "ServiceStack.Redis.4.0.46.nupkg",
-        "ServiceStack.Redis.4.0.46.nupkg.sha512",
+        "lib/net35/ServiceStack.Redis.dll",
+        "lib/net35/ServiceStack.Redis.XML",
+        "ServiceStack.Redis.3.9.71.nupkg",
+        "ServiceStack.Redis.3.9.71.nupkg.sha512",
         "ServiceStack.Redis.nuspec"
       ]
     },
-    "ServiceStack.Text/4.0.46": {
+    "ServiceStack.Text/3.9.71": {
       "type": "package",
-      "sha512": "Zx2aq74+ppqBN32bOn1va2r1uGjBNTcdoAnx/lzHdo5qaeO0/tpNLHCZhO+D7HgAIt2kVlzYeZ9zDTh0eItpnA==",
+      "sha512": "+nIZF3d2o50W4/DjtfN21AzH1shaRlEiixgFISx3v5WD4WJVRd3WLmW75+SIiPOnCQAoZ+zbGX91hrBNkx+7xg==",
       "files": [
-        "lib/net40/ServiceStack.Text.dll",
-        "lib/net40/ServiceStack.Text.xml",
-        "lib/portable-net45+win8+monotouch+monoandroid+xamarin.ios10/ServiceStack.Text.dll",
+        "lib/net35/ServiceStack.Text.dll",
+        "lib/net35/ServiceStack.Text.XML",
+        "lib/sl4/ServiceStack.Text.dll",
+        "lib/sl4/ServiceStack.Text.xml",
+        "lib/sl4-windowsphone71/ServiceStack.Text.WP.dll",
+        "lib/sl4-windowsphone71/ServiceStack.Text.WP.XML",
         "lib/sl5/ServiceStack.Text.dll",
-        "lib/sl5/ServiceStack.Text.xml",
-        "ServiceStack.Text.4.0.46.nupkg",
-        "ServiceStack.Text.4.0.46.nupkg.sha512",
+        "lib/sl5/ServiceStack.Text.XML",
+        "ServiceStack.Text.3.9.71.nupkg",
+        "ServiceStack.Text.3.9.71.nupkg.sha512",
         "ServiceStack.Text.nuspec"
       ]
     },

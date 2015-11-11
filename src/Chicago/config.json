@@ -6,8 +6,8 @@
       "maxConnection": 1000000
     },
 
-    "LogConfig": {
-      "logPath": "/home/deployment/logs/chicago.log"
+    "Log": {
+      "logFile": "/home/deployment/logs/Chicago/6789.log"
     },
 
     "NetConfig": {

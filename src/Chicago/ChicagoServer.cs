@@ -16,7 +16,7 @@ namespace Chicago
 {
     public class ChicagoServer : CSServer
     {
-        public static RedisManagerPool MessagePubSubServerClientManager { get; private set; }
+        public static IRedisClientsManager MessagePubSubServerClientManager { get; private set; }
         public static TokenService TokenService { get; private set; }
 
         public static ChicagoServer Instance { get; private set; }
@@ -29,8 +29,11 @@ namespace Chicago
 
         protected override void AfterStartServerInit()
         {
-            MessagePubSubServerClientManager = new RedisManagerPool(Program.Configuration["Data:MessagePubSubServer:url"]);
-            var tokenServerClientManager = new RedisManagerPool(Program.Configuration["Data:TokenServer:url"]);
+            var pbServerUrl = Program.Configuration["Data:MessagePubSubServer:url"].Replace("redis://", "");
+            MessagePubSubServerClientManager = new PooledRedisClientManager(pbServerUrl);
+
+            var tokenServerUrl = Program.Configuration["Data:TokenServer:url"].Replace("redis://", "");
+            var tokenServerClientManager = new PooledRedisClientManager(tokenServerUrl);
             TokenService = new TokenService(tokenServerClientManager);
             base.AfterStartServerInit();
         }

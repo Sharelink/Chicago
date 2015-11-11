@@ -72,9 +72,11 @@ namespace Chicago.Extension
                     session.RegistUser(sharelinker);
                     this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
                     NotificaionCenterExtension.Instance.Subscript(result.UserId, session);
+                    Log(string.Format("Login Success:{0}", userId));
                 }
                 else
                 {
+                    Log(string.Format("Login Failed:{0}", userId));
                     this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
                 }
             });

@@ -43,9 +43,9 @@ namespace Chicago
             server.UseServerConfig(new ServerConfigReader());
 #if DEBUG
                 server.UseLogger(ConsoleLogger.Instance);
-                server.UseLogger(new FileLogger(Configuration["Data:LogConfig:logPath"]));
+                server.UseLogger(new FileLogger(Configuration["Data:Log:logFile"]));
 #else
-                server.UseLogger(new FileLogger(Configuration["Data:LogConfig:logPath"]));
+                server.UseLogger(new FileLogger(Configuration["Data:Log:logFile"]));
 #endif
             server.UseMessageRoute(new JsonRouteFilter());
             server.UseExtension(new SharelinkerValidateExtension());
