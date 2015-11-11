@@ -52,10 +52,15 @@ namespace Chicago
             server.UseExtension(new BahamutAppValidateExtension());
             server.UseExtension(new NotificaionCenterExtension());
             server.UseExtension(new HeartBeatExtension());
-            server.StartServer();
-            while (true)
+            try
             {
-                Thread.Sleep(int.MaxValue);
+                server.StartServer();
+                Thread.Sleep(Timeout.Infinite);
+            }
+            catch (Exception ex)
+            {
+                NLog.LogManager.GetCurrentClassLogger().Fatal(ex);
+                throw;
             }
         }
     }

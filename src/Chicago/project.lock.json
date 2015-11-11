@@ -25,8 +25,7 @@
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
-          "CSharpServerFrameworkAbstract": "1.0.0",
-          "log4net": "2.0.3"
+          "CSharpServerFrameworkAbstract": "1.0.0"
         }
       },
       "CSharpServerFrameworkAbstract/1.0.0": {
@@ -76,15 +75,6 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
-        }
-      },
-      "log4net/2.0.3": {
-        "type": "package",
-        "compile": {
-          "lib/net40-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net40-full/log4net.dll": {}
         }
       },
       "Microsoft.AspNet.FileProviders.Abstractions/1.0.0-beta8": {
@@ -818,8 +808,7 @@
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
-          "CSharpServerFrameworkAbstract": "1.0.0",
-          "log4net": "2.0.3"
+          "CSharpServerFrameworkAbstract": "1.0.0"
         }
       },
       "CSharpServerFrameworkAbstract/1.0.0": {
@@ -869,15 +858,6 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
-        }
-      },
-      "log4net/2.0.3": {
-        "type": "package",
-        "compile": {
-          "lib/net40-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net40-full/log4net.dll": {}
         }
       },
       "Microsoft.AspNet.FileProviders.Abstractions/1.0.0-beta8": {
@@ -1614,8 +1594,7 @@
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
         "dependencies": {
-          "CSharpServerFrameworkAbstract": "1.0.0",
-          "log4net": "2.0.3"
+          "CSharpServerFrameworkAbstract": "1.0.0"
         }
       },
       "CSharpServerFrameworkAbstract/1.0.0": {
@@ -1665,15 +1644,6 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
-        }
-      },
-      "log4net/2.0.3": {
-        "type": "package",
-        "compile": {
-          "lib/net40-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net40-full/log4net.dll": {}
         }
       },
       "Microsoft.AspNet.FileProviders.Abstractions/1.0.0-beta8": {
@@ -2458,29 +2428,6 @@
         "tools/init.ps1",
         "tools/install.ps1",
         "tools/migrate.exe"
-      ]
-    },
-    "log4net/2.0.3": {
-      "type": "package",
-      "sha512": "rxMHzK5efGPo5XtRnuUGO4tfW5l74Aji6kVmtMAt2SgcB5PHBNtNY7yj2LCI2VtKrLPO7kCKR6kH6lIZggq3Gg==",
-      "files": [
-        "lib/net10-full/log4net.dll",
-        "lib/net10-full/log4net.xml",
-        "lib/net11-full/log4net.dll",
-        "lib/net11-full/log4net.xml",
-        "lib/net20-full/log4net.dll",
-        "lib/net20-full/log4net.xml",
-        "lib/net35-client/log4net.dll",
-        "lib/net35-client/log4net.xml",
-        "lib/net35-full/log4net.dll",
-        "lib/net35-full/log4net.xml",
-        "lib/net40-client/log4net.dll",
-        "lib/net40-client/log4net.xml",
-        "lib/net40-full/log4net.dll",
-        "lib/net40-full/log4net.xml",
-        "log4net.2.0.3.nupkg",
-        "log4net.2.0.3.nupkg.sha512",
-        "log4net.nuspec"
       ]
     },
     "Microsoft.AspNet.FileProviders.Abstractions/1.0.0-beta8": {
