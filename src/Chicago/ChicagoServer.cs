@@ -25,16 +25,17 @@ namespace Chicago
         {
             base.ServerInit();
             Instance = this;
-        }
-
-        protected override void AfterStartServerInit()
-        {
             var pbServerUrl = Program.Configuration["Data:MessagePubSubServer:url"].Replace("redis://", "");
-            MessagePubSubServerClientManager = new PooledRedisClientManager(pbServerUrl);
+            MessagePubSubServerClientManager = new BasicRedisClientManager(pbServerUrl);
 
             var tokenServerUrl = Program.Configuration["Data:TokenServer:url"].Replace("redis://", "");
             var tokenServerClientManager = new PooledRedisClientManager(tokenServerUrl);
             TokenService = new TokenService(tokenServerClientManager);
+        }
+
+        protected override void AfterStartServerInit()
+        {
+            
             base.AfterStartServerInit();
         }
 

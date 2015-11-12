@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ServiceStack.Redis;
 
 namespace Chicago.Extension
 {
@@ -13,9 +14,18 @@ namespace Chicago.Extension
     {
         public static NotificaionCenterExtension Instance { get; private set; }
         private IDictionary<string, ICSharpServerSession> subscriptionMap;
+
+        public override void Init()
+        {
+            subscriptionMap = new Dictionary<string, ICSharpServerSession>();
+            ChicagoServer.Instance.OnSessionDisconnected += Instance_OnSessionDisconnected;
+            Instance = this;
+        }
+
         public void Subscript(string userId, ICSharpServerSession session)
         {
-            using (var subscription = ChicagoServer.MessagePubSubServerClientManager.GetClient().CreateSubscription())
+            using (var client = ChicagoServer.MessagePubSubServerClientManager.GetClient())
+            using (var subscription = client.CreateSubscription())
             {
                 subscription.OnUnSubscribe = channel =>
                 {
@@ -26,6 +36,7 @@ namespace Chicago.Extension
                 {
                     Log(string.Format("OnSubscribe User:{0}", channel));
                     subscriptionMap[channel] = session;
+
                     Log(string.Format("Chicago Instance Online Users:{0}", subscriptionMap.Count));
                 };
 
@@ -53,13 +64,6 @@ namespace Chicago.Extension
                 };
                 subscription.SubscribeToChannels(userId);
             };
-        }
-
-        public override void Init()
-        {
-            subscriptionMap = new Dictionary<string, ICSharpServerSession>();
-            ChicagoServer.Instance.OnSessionDisconnected += Instance_OnSessionDisconnected;
-            Instance = this;
         }
 
         private void Instance_OnSessionDisconnected(object sender, CSServerEventArgs e)
