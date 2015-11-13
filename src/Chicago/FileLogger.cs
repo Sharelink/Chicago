@@ -16,7 +16,7 @@ namespace Chicago
             var fileTaget = new NLog.Targets.FileTarget();
             fileTaget.FileName = path;
             fileTaget.Name = "FileLogger";
-            fileTaget.Layout = "${message}";
+            fileTaget.Layout = "${message};${exception}";
             var logRule = new LoggingRule("*", NLog.LogLevel.Debug, fileTaget);
             config.AddTarget(fileTaget);
             config.LoggingRules.Add(logRule);
