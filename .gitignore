@@ -219,3 +219,4 @@ FakesAssemblies/
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
 src/Chicago/project.lock.json
+src/Chicago/config_debug.json
