@@ -11,6 +11,7 @@ using BahamutService.Model;
 
 namespace Chicago.Extension
 {
+    [ValidateExtension]
     [ExtensionInfo("BahamutAppValidation")]
     public class BahamutAppValidateExtension : ExtensionBaseEx
     {
@@ -44,6 +45,7 @@ namespace Chicago.Extension
         }
     }
 
+    [ValidateExtension]
     [ExtensionInfo("SharelinkerValidation")]
     public class SharelinkerValidateExtension : ExtensionBaseEx
     {
@@ -67,7 +69,8 @@ namespace Chicago.Extension
                     var sharelinker = new Sharelinker()
                     {
                         Session = session,
-                        UserData = result
+                        UserData = result,
+                        IsOnline = true
                     };
                     session.RegistUser(sharelinker);
                     this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
@@ -82,6 +85,27 @@ namespace Chicago.Extension
             });
         }
 
+        [CommandInfo(2, "Logout")]
+        public void Logout(ICSharpServerSession session, dynamic msg)
+        {
+            string appToken = msg.AppToken;
+            string appkey = msg.Appkey;
+            string userId = msg.UserId;
+            Task.Run(async () =>
+            {
+                var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
+                if (result != null && NotificaionCenterExtension.Instance.UnSubscribeUserSession(session))
+                {
+                    Log(string.Format("Login Success:{0}", userId));
+                }
+                else
+                {
+                    Log(string.Format("Logout Failed:{0}", userId));
+                    this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
+                }
+            });
+        }
+
         public override void Init()
         {
         }
@@ -91,6 +115,8 @@ namespace Chicago.Extension
     {
         public ICSharpServerSession Session { get; set; }
         public AccountSessionData UserData { get; set; }
+        public string DeviceToken { get; set; }
+        public bool IsOnline { get; set; }
         public bool IsUserValidate
         {
             get
@@ -103,7 +129,6 @@ namespace Chicago.Extension
     public class ChicagoUser : ICSharpServerUser
     {
         public ICSharpServerSession Session { get; set; }
-
         public bool IsUserValidate
         {
             get
