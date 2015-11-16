@@ -202,7 +202,6 @@ namespace Chicago.Extension
             {
                 sharelinker = registUserMap[sharelinker.UserData.UserId];
                 sharelinker.DeviceToken = deviceToken;
-                SendAPNs(deviceToken, "ChatMessage");
             }
             catch (Exception)
             {
