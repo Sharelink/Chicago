@@ -12,9 +12,6 @@ using CSharpServerFramework.Log;
 using CSServerJsonProtocol;
 using System.Threading;
 using CSharpServerFramework;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.AspNet.Builder;
 
 namespace Chicago
 {

@@ -179,8 +179,8 @@ namespace Chicago.Extension
                     using (var psClient = ChicagoServer.MessagePubSubServerClientManager.GetClient())
                     {
                         var userId = sharelinker.UserData.UserId;
-
-                        return psClient.PublishMessage(userId, "UnSubscribe") > 0;
+                        psClient.PublishMessage(userId, "UnSubscribe");
+                        return true;
                     }
                 }
             }

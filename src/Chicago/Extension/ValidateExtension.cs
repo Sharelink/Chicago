@@ -91,19 +91,16 @@ namespace Chicago.Extension
             string appToken = msg.AppToken;
             string appkey = msg.Appkey;
             string userId = msg.UserId;
-            Task.Run(async () =>
+            var sharelinker = session.User as Sharelinker;
+            if (NotificaionCenterExtension.Instance.UnSubscribeUserSession(session))
             {
-                var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
-                if (result != null && NotificaionCenterExtension.Instance.UnSubscribeUserSession(session))
-                {
-                    Log(string.Format("Login Success:{0}", userId));
-                }
-                else
-                {
-                    Log(string.Format("Logout Failed:{0}", userId));
-                    this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
-                }
-            });
+                Log(string.Format("Login Success:{0}", userId));
+                this.CloseSession(session);
+            }
+            else
+            {
+                Log(string.Format("Logout Failed:{0}", userId));
+            }
         }
 
         public override void Init()
