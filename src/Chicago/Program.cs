@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using CSharpServerFramework.Extension;
 using System.Net;
-using CSharpServerFramework.Server;
 using Chicago.Extension;
 using CSharpServerFramework.Log;
 using CSServerJsonProtocol;
 using System.Threading;
 using CSharpServerFramework;
+using Microsoft.Extensions.Configuration;
 
 namespace Chicago
 {
@@ -19,21 +14,19 @@ namespace Chicago
     {
         public static IConfiguration Configuration { get; private set; }
         public static ChicagoServer Server { get; private set; }
-        public Program(IApplicationEnvironment appEnv)
+
+        public static void Main(string[] args)
         {
             var conBuilder = new ConfigurationBuilder();
-            conBuilder.SetBasePath(appEnv.ApplicationBasePath).AddEnvironmentVariables();
+            conBuilder.AddEnvironmentVariables();
 #if DEBUG
             conBuilder.AddJsonFile("config_debug.json");
+            Console.WriteLine("Debug Mode");
 #else
             conBuilder.AddJsonFile("config.json");
 #endif
             Configuration = conBuilder.Build();
-            
-        }
 
-        public void Main(string[] args)
-        {
             var server = new ChicagoServer();
             Server = server;
             server.UseNetConfig(new NetConfigReader());

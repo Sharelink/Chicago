@@ -1,26 +1,31 @@
-{
-  "licenseUrl": "",
-  "projectUrl": "",
-  "tags": "",
+﻿{
   "version": "1.0.0-*",
+  "description": "Chicago Console Application",
+  "authors": [ "广杰" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
 
-  "frameworks": {
-    "dnx451": { }
+  "compilationOptions": {
+    "emitEntryPoint": true
   },
 
   "dependencies": {
-    "Microsoft.Dnx.Runtime.Abstractions": "1.0.0-*",
-    "Microsoft.Framework.Configuration": "1.0.0-*",
-    "Microsoft.Framework.Configuration.EnvironmentVariables": "1.0.0-*",
-    "Microsoft.Framework.Configuration.Json": "1.0.0-*",
-    "ServerControlService": "1.0.0-*",
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",
     "CSServerJsonProtocol": "1.0.0-*",
+    "Microsoft.Extensions.Configuration": "1.0.0-*",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
     "System.Net.Http": "4.0.1-*"
   },
 
   "commands": {
     "Chicago": "Chicago"
+  },
+
+  "frameworks": {
+    "dnx451": {
+    }
   }
 }
