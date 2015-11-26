@@ -4,4 +4,7 @@
     <ActiveDebugProfile>Chicago</ActiveDebugProfile>
     <NameOfLastUsedPublishProfile>chicago</NameOfLastUsedPublishProfile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

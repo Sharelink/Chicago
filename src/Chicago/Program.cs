@@ -19,14 +19,36 @@ namespace Chicago
         {
             var conBuilder = new ConfigurationBuilder();
             conBuilder.AddEnvironmentVariables();
-#if DEBUG
-            conBuilder.AddJsonFile("config_debug.json");
-            Console.WriteLine("Debug Mode");
-#else
-            conBuilder.AddJsonFile("config.json");
-#endif
-            Configuration = conBuilder.Build();
+            string configFile = "";
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "--config")
+                {
+                    try
+                    {
+                        configFile = args[i + 1];
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("--config no config file path");
+                        throw;
+                    }
+                    
+                }
+            }
 
+            if (string.IsNullOrWhiteSpace(configFile))
+            {
+#if DEBUG
+                configFile = "config_debug.json";
+                Console.WriteLine("Debug Mode");
+#else
+                configFile = "/etc/bahamut/chicago.json";
+#endif
+            }
+
+            conBuilder.AddJsonFile(configFile);
+            Configuration = conBuilder.Build();
             var server = new ChicagoServer();
             Server = server;
             server.UseNetConfig(new NetConfigReader());

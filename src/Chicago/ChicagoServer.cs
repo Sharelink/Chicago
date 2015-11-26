@@ -1,14 +1,4 @@
 ﻿using CSharpServerFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CSharpServerFramework.Client;
-using CSharpServerFramework.Extension;
-using CSharpServerFramework.Log;
-using CSharpServerFramework.Message;
-using CSharpServerFramework.Server;
-using BahamutCommon;
 using ServiceStack.Redis;
 using BahamutService;
 

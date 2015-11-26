@@ -6,10 +6,6 @@
   "projectUrl": "",
   "licenseUrl": "",
 
-  "compilationOptions": {
-    "emitEntryPoint": true
-  },
-
   "dependencies": {
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",

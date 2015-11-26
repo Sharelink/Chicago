@@ -25,11 +25,11 @@
       "url": "chicago://chicago.sharelink.online:6789"
     },
     "MessagePubSubServer": {
-      "url": "redis://pubsub.sharelink.online:6379"
+      "url": "redis://$psw@pubsub.sharelink.online:6379"
     },
 
     "TokenServer": {
-      "url": "redis://token.sharelink.online:6379"
+      "url": "redis://$psw@token.sharelink.online:6379"
     }
   }
 }
