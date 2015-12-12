@@ -8,7 +8,6 @@ namespace Chicago
     {
         public static IRedisClientsManager MessagePubSubServerClientManager { get; private set; }
         public static TokenService TokenService { get; private set; }
-
         public static ChicagoServer Instance { get; private set; }
 
         protected override void ServerInit()
@@ -25,7 +24,6 @@ namespace Chicago
 
         protected override void AfterStartServerInit()
         {
-            
             base.AfterStartServerInit();
         }
 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BahamutService.Model;
+using NLog;
 
 namespace Chicago.Extension
 {
@@ -74,12 +75,12 @@ namespace Chicago.Extension
                     };
                     session.RegistUser(sharelinker);
                     this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
-                    Log(string.Format("Login Success:{0}", userId));
+                    LogManager.GetLogger("Info").Info("Login Success:{0}", userId);
                     NotificaionCenterExtension.Instance.Subscript(result.UserId, session);
                 }
                 else
                 {
-                    Log(string.Format("Login Failed:{0}", userId));
+                    LogManager.GetLogger("Info").Info("Login Failed:{0}", userId);
                     this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
                 }
             });
@@ -94,12 +95,12 @@ namespace Chicago.Extension
             var sharelinker = session.User as Sharelinker;
             if (NotificaionCenterExtension.Instance.UnSubscribeUserSession(session))
             {
-                Log(string.Format("Login Success:{0}", userId));
+                LogManager.GetLogger("Info").Info("Login Success:{0}", userId);
                 this.CloseSession(session);
             }
             else
             {
-                Log(string.Format("Logout Failed:{0}", userId));
+                LogManager.GetLogger("Info").Info("Logout Failed:{0}", userId);
             }
         }
 

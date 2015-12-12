@@ -3,10 +3,9 @@ using CSharpServerFramework;
 using CSServerJsonProtocol;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using ServiceStack.Redis;
 using System.Net.Http;
+using NLog;
 
 namespace Chicago.Extension
 {
@@ -44,7 +43,7 @@ namespace Chicago.Extension
             catch (Exception)
             {
                 registUserMap[userId] = session.User as Sharelinker;
-                Log(string.Format("Chicago Instance Online Users:{0}", registUserMap.Count));
+                LogManager.GetLogger("Info").Info("Chicago Instance Online Users:{0}", registUserMap.Count);
                 SubscribeToPubSubSystem(userId);
             }
             
@@ -57,12 +56,12 @@ namespace Chicago.Extension
             {
                 subscription.OnUnSubscribe = channel =>
                 {
-                    Log(string.Format("OnUnSubscribe User:{0}", channel));
+                    LogManager.GetLogger("Info").Info("OnUnSubscribe User:{0}", channel);
                 };
 
                 subscription.OnSubscribe = channel =>
                 {
-                    Log(string.Format("OnSubscribe User:{0}", channel));
+                    LogManager.GetLogger("Info").Info("OnSubscribe User:{0}", channel);
                 };
 
                 subscription.OnMessage = (channel, message) =>
@@ -127,7 +126,8 @@ namespace Chicago.Extension
                         aps = new
                         {
                             alert = new { loc_key = notifyFormat },
-                            badge = 1
+                            badge = 1,
+                            sound = "default"
                         },
                         display_type = "notification"
                     }
@@ -141,7 +141,7 @@ namespace Chicago.Extension
                 var result = await msg.Content.ReadAsStringAsync();
                 if (msg.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    Log("UMeng Message:" + result);
+                    LogManager.GetLogger("Info").Info("UMeng Message:" + result);
                 }
                 else
                 {
@@ -205,7 +205,7 @@ namespace Chicago.Extension
             }
             catch (Exception)
             {
-                Log(string.Format("Regist Device Token Error:{0}", sharelinker.UserData.UserId));
+                LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", sharelinker.UserData.UserId);
                 throw;
             }
         }

@@ -7,8 +7,6 @@
   "licenseUrl": "",
 
   "dependencies": {
-    "CSharpClientFramework": "1.0.0-*",
-    "CSServerJsonProtocol": "1.0.0-*",
     "Newtonsoft.Json": "7.0.1"
   },
 

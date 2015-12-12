@@ -1,4 +1,5 @@
 ﻿using CSharpServerFramework.Log;
+using NLog;
 using NLog.Config;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace Chicago
     {
         public FileLogger(string path)
         {
-            LoggingConfiguration config = new LoggingConfiguration();
+            var config = LogManager.Configuration == null ? new LoggingConfiguration() : LogManager.Configuration;
             var fileTaget = new NLog.Targets.FileTarget();
             fileTaget.FileName = path;
-            fileTaget.Name = "FileLogger";
+            fileTaget.Name = "Chicago";
             fileTaget.Layout = "${message};${exception}";
-            var logRule = new LoggingRule("*", NLog.LogLevel.Debug, fileTaget);
+            var logRule = new LoggingRule("Chicago", NLog.LogLevel.Debug, fileTaget);
             config.AddTarget(fileTaget);
             config.LoggingRules.Add(logRule);
             NLog.LogManager.Configuration = config;

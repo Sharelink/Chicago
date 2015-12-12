@@ -33,7 +33,6 @@ namespace Chicago
                         Console.WriteLine("--config no config file path");
                         throw;
                     }
-                    
                 }
             }
 
@@ -49,27 +48,38 @@ namespace Chicago
 
             conBuilder.AddJsonFile(configFile);
             Configuration = conBuilder.Build();
-            var server = new ChicagoServer();
-            Server = server;
-            server.UseNetConfig(new NetConfigReader());
-            server.UseServerConfig(new ServerConfigReader());
-            server.UseLogger(new FileLogger(Configuration["Data:Log:logFile"]));
+
+            //Nlog
+            var nlogConfig = new NLog.Config.LoggingConfiguration();
+            BahamutCommon.LoggerLoaderHelper.LoadLoggerToLoggingConfig(nlogConfig, Configuration, "Data:Log:fileLoggers");
+
 #if DEBUG
-            server.UseLogger(ConsoleLogger.Instance);
+            BahamutCommon.LoggerLoaderHelper.AddConsoleLoggerToLogginConfig(nlogConfig);
 #endif
-            server.UseMessageRoute(new JsonRouteFilter());
-            server.UseExtension(new SharelinkerValidateExtension());
-            server.UseExtension(new BahamutAppValidateExtension());
-            server.UseExtension(new NotificaionCenterExtension());
-            server.UseExtension(new HeartBeatExtension());
+            NLog.LogManager.Configuration = nlogConfig;
+
             try
             {
+                //CSServer
+                var server = new ChicagoServer();
+                Server = server;
+                server.UseNetConfig(new NetConfigReader());
+                server.UseServerConfig(new ServerConfigReader());
+                server.UseLogger(new FileLogger(Configuration["Data:ServerLog"]));
+#if DEBUG
+                server.UseLogger(ConsoleLogger.Instance);
+#endif
+                server.UseMessageRoute(new JsonRouteFilter());
+                server.UseExtension(new SharelinkerValidateExtension());
+                server.UseExtension(new BahamutAppValidateExtension());
+                server.UseExtension(new NotificaionCenterExtension());
+                server.UseExtension(new HeartBeatExtension());
                 server.StartServer();
                 Thread.Sleep(Timeout.Infinite);
             }
             catch (Exception ex)
             {
-                NLog.LogManager.GetCurrentClassLogger().Fatal(ex);
+                NLog.LogManager.GetLogger("Chicago").Fatal(ex);
                 throw;
             }
         }

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Chicago Console Application",
   "authors": [ "广杰" ],
@@ -9,11 +9,12 @@
   "dependencies": {
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",
+    "CSharpServerFrameworkAbstract": "1.0.0-*",
     "CSServerJsonProtocol": "1.0.0-*",
     "Microsoft.Extensions.Configuration": "1.0.0-*",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-    "System.Net.Http": "4.0.1-*"
+    "System.Net.Http": "4.0.0"
   },
 
   "commands": {
