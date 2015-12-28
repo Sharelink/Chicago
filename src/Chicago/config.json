@@ -28,7 +28,7 @@
       "url": "redis://$psw@token.sharelink.online:6379"
     },
     
-    "ServerLog": "/home/deplayment/logs/Chicago/9657/server.log",
+    "ServerLog": "/home/deployment/logs/Chicago/9657/server.log",
 
     "Log": {
       "fileLoggers": [
