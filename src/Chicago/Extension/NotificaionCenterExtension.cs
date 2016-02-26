@@ -105,7 +105,10 @@ namespace Chicago.Extension
                 else if (message.StartsWith("LinkMessage"))
                 {
                     notifyFormat = "NEW_MSG_NOTIFICATION";
-                }
+                }else if (message.StartsWith("ShareThingMessage"))
+				{
+					notifyFormat = "NEW_SHARE_NOTIFICATION";
+				}
                 else
                 {
                     return;
