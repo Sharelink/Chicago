@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "ChicagoClientLib Class Library",
   "authors": [ "cplov" ],
@@ -7,7 +7,9 @@
   "licenseUrl": "",
 
   "dependencies": {
-    "Newtonsoft.Json": "7.0.1"
+    "CSharpClientFramework": "1.0.0-*",
+    "CSServerJsonProtocol": "1.0.0-*",
+    "Newtonsoft.Json": "8.0.2"
   },
 
   "frameworks": {

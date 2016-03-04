@@ -29,6 +29,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpServerFrameworkAbstra
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSServerJsonProtocol", "..\..\CSharpServerFramework\CSServerJsonProtocol\src\CSServerJsonProtocol\CSServerJsonProtocol.xproj", "{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpClientFramework", "..\..\CSharpServerFramework\CSharpClientFramework\src\CSharpClientFramework\CSharpClientFramework.xproj", "{E673009A-F331-4D23-9286-B2166BE43BE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 		{95C5CE52-F438-4FB2-8245-038B366D0CF1} = {A6E093CF-DE9C-4A14-A2E0-511191D6F73C}
 		{6D288983-6691-47A2-A057-3649A8563064} = {A6E093CF-DE9C-4A14-A2E0-511191D6F73C}
 		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53} = {A6E093CF-DE9C-4A14-A2E0-511191D6F73C}
+		{E673009A-F331-4D23-9286-B2166BE43BE9} = {A6E093CF-DE9C-4A14-A2E0-511191D6F73C}
 	EndGlobalSection
 EndGlobal

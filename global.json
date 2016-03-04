@@ -1,5 +1,5 @@
 {
-  "projects": [ "src", "test", "../BahamutZero/src", "../../CSharpServerFramework", "../ServerControl/src", "../../CSharpServerFramework/CSharpServerFramework/src", "../../CSharpServerFramework/CSServerJsonProtocol/src", "../../CSharpServerFramework/CSharpServerFrameworkAbstract/src" ],
+  "projects": [ "src", "test", "../BahamutZero/src", "../../CSharpServerFramework", "../ServerControl/src", "../../CSharpServerFramework/CSharpServerFramework/src", "../../CSharpServerFramework/CSServerJsonProtocol/src", "../../CSharpServerFramework/CSharpServerFrameworkAbstract/src", "../../CSharpServerFramework/CSharpClientFramework/src" ],
   "sdk": {
     "version": "1.0.0-rc1-final"
   }
