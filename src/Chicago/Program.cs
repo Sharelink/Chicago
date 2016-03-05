@@ -40,8 +40,10 @@ namespace Chicago
             {
 #if DEBUG
                 configFile = "config_debug.json";
+                conBuilder.AddJsonFile("chicago_notify_apps.json");
                 Console.WriteLine("Debug Mode");
 #else
+                conBuilder.AddJsonFile("/etc/bahamut/chicago_notify_apps.json");
                 configFile = "/etc/bahamut/chicago.json";
 #endif
             }
@@ -72,9 +74,18 @@ namespace Chicago
                 server.UseMessageRoute(new JsonRouteFilter());
                 server.UseExtension(new SharelinkerValidateExtension());
                 server.UseExtension(new BahamutAppValidateExtension());
-                server.UseExtension(new NotificaionCenterExtension());
+
+                //NotificationCenter Extension
+                ChicagoServer.LoadNotifyApps();
+                var notificationExt = new NotificaionCenterExtension();
+                server.UseExtension(notificationExt);
                 server.UseExtension(new HeartBeatExtension());
                 server.StartServer();
+                foreach (var notifyApp in ChicagoServer.NotifyApps)
+                {
+                    Console.WriteLine(notifyApp.Value);
+                    notificationExt.SubscribeToPubSubSystem(notifyApp.Value);
+                }
                 Thread.Sleep(Timeout.Infinite);
             }
             catch (Exception ex)

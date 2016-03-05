@@ -67,7 +67,7 @@ namespace Chicago.Extension
                 var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
                 if (result != null)
                 {
-                    var sharelinker = new Sharelinker()
+                    var sharelinker = new BahamutAppUser()
                     {
                         Session = session,
                         UserData = result,
@@ -76,7 +76,7 @@ namespace Chicago.Extension
                     session.RegistUser(sharelinker);
                     this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
                     LogManager.GetLogger("Info").Info("Login Success:{0}", userId);
-                    NotificaionCenterExtension.Instance.Subscript(result.UserId, session);
+                    NotificaionCenterExtension.Instance.RegistUser(result.UserId, session);
                 }
                 else
                 {
@@ -92,10 +92,10 @@ namespace Chicago.Extension
             string appToken = msg.AppToken;
             string appkey = msg.Appkey;
             string userId = msg.UserId;
-            var sharelinker = session.User as Sharelinker;
-            if (NotificaionCenterExtension.Instance.UnSubscribeUserSession(session))
+            var user = session.User as BahamutAppUser;
+            if (NotificaionCenterExtension.Instance.RemoveUser(user))
             {
-                LogManager.GetLogger("Info").Info("Login Success:{0}", userId);
+                LogManager.GetLogger("Info").Info("Logout Success:{0}", userId);
                 this.CloseSession(session);
             }
             else
@@ -109,7 +109,7 @@ namespace Chicago.Extension
         }
     }
 
-    public class Sharelinker : ICSharpServerUser
+    public class BahamutAppUser : ICSharpServerUser
     {
         public ICSharpServerSession Session { get; set; }
         public AccountSessionData UserData { get; set; }

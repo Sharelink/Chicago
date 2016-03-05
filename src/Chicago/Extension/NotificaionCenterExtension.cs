@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using NLog;
+using ServiceStack.Redis;
+using BahamutService.Service;
 
 namespace Chicago.Extension
 {
@@ -13,11 +15,11 @@ namespace Chicago.Extension
     public class NotificaionCenterExtension : JsonExtensionBase
     {
         public static NotificaionCenterExtension Instance { get; private set; }
-        private IDictionary<string, Sharelinker> registUserMap;
+        private IDictionary<string, BahamutAppUser> registUserMap;
 
         public override void Init()
         {
-            registUserMap = new Dictionary<string, Sharelinker>();
+            registUserMap = new Dictionary<string, BahamutAppUser>();
             ChicagoServer.Instance.OnSessionDisconnected += OnSessionDisconnected;
             Instance = this;
         }
@@ -25,70 +27,97 @@ namespace Chicago.Extension
         private void OnSessionDisconnected(object sender, CSServerEventArgs e)
         {
             var session = e.State as ICSharpServerSession;
-            var sharelinker = session.User as Sharelinker;
+            var sharelinker = session.User as BahamutAppUser;
             if (sharelinker != null)
             {
                 sharelinker.IsOnline = false;
             }
         }
 
-        public void Subscript(string userId, ICSharpServerSession session)
+        public void RegistUser(string userId, ICSharpServerSession session)
         {
-            try
+            var newUser = session.User as BahamutAppUser;
+            var key = GenerateRegistUserMapKey(newUser.UserData.Appkey, userId);
+            if (string.IsNullOrWhiteSpace(key))
             {
-                var sharelinker = registUserMap[userId];
-                CloseSession(sharelinker.Session);
-                registUserMap[userId] = session.User as Sharelinker;
+                return;
+            }
+            try
+            {   
+                var oldClientUser = registUserMap[key];
+                CloseSession(oldClientUser.Session);
+                registUserMap[key] = newUser;
             }
             catch (Exception)
             {
-                registUserMap[userId] = session.User as Sharelinker;
+                registUserMap[key] = newUser;
                 LogManager.GetLogger("Info").Info("Chicago Instance Online Users:{0}", registUserMap.Count);
-                SubscribeToPubSubSystem(userId);
             }
-            
         }
 
-        private void SubscribeToPubSubSystem(string userId)
+        public bool RemoveUser(BahamutAppUser user)
         {
-            using (var client = ChicagoServer.MessagePubSubServerClientManager.GetClient())
-            using (var subscription = client.CreateSubscription())
+            var key = GenerateRegistUserMapKey(user.UserData.Appkey, user.UserData.UserId);
+            return registUserMap.Remove(key);
+        }
+
+        private string GenerateRegistUserMapKey(string appkey,string userId)
+        {
+            var appUniqueId = ChicagoServer.GetAppUniqueIdByAppkey(appkey);
+            if (string.IsNullOrWhiteSpace(appUniqueId) || string.IsNullOrWhiteSpace(userId))
             {
-                subscription.OnUnSubscribe = channel =>
+                return null;
+            }
+            return GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, userId);
+        }
+
+        private string GenerateRegistUserMapKeyByAppUniqueId(string appUniqueId, string userId)
+        {
+            return string.Format("{0}:{1}", appUniqueId, userId);
+        }
+
+        public void SubscribeToPubSubSystem(string channel)
+        {
+#if DEBUG
+            LogManager.GetLogger("Debug").Debug("Subscribe Channel:" + channel);
+#endif
+            using (var subscription = ChicagoServer.BahamutPubSubService.CreateSubscription())
+            {
+                subscription.OnUnSubscribe = appUniqueId =>
                 {
-                    LogManager.GetLogger("Info").Info("OnUnSubscribe User:{0}", channel);
+                    LogManager.GetLogger("Info").Info("OnUnSubscribe:{0}", appUniqueId);
                 };
 
-                subscription.OnSubscribe = channel =>
+                subscription.OnSubscribe = appUniqueId =>
                 {
-                    LogManager.GetLogger("Info").Info("OnSubscribe User:{0}", channel);
+                    LogManager.GetLogger("Info").Info("OnSubscribe:{0}", appUniqueId);
                 };
 
-                subscription.OnMessage = (channel, message) =>
+                subscription.OnMessage = (appUniqueId, message) =>
                 {
-                    var ss = registUserMap[channel];
-                    if (ss != null)
+                    var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
+                    try
                     {
-                        if (message == "UnSubscribe")
+                        var ss = registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, msgModel.ToUser)];
+                        if (ss.IsOnline)
                         {
-                            registUserMap.Remove(channel);
-                            subscription.UnSubscribeFromChannels(channel);
-                        }
-                        else if (ss.IsOnline)
-                        {
-                            SendChicagoMessageToClient(message, ss);
+                            SendChicagoMessageToClient(msgModel, ss);
                         }
                         else
                         {
-                            SendAPNs(ss.DeviceToken, message);
+                            SendAPNs(ss.DeviceToken, msgModel);
                         }
                     }
+                    catch (Exception)
+                    {
+
+                    }
                 };
-                subscription.SubscribeToChannels(userId);
+                subscription.SubscribeToChannels(channel);
             };
         }
 
-        private void SendAPNs(string deviceToken,string message)
+        private void SendAPNs(string deviceToken,BahamutPublishModel message)
         {
             if (string.IsNullOrWhiteSpace(deviceToken))
             {
@@ -98,17 +127,18 @@ namespace Chicago.Extension
             Task.Run(async () =>
             {
                 string notifyFormat;
-                if (message.StartsWith("ChatMessage"))
+                if (message.NotifyType == "ChatMessage")
                 {
                     notifyFormat = "NEW_MSG_NOTIFICATION";
                 }
-                else if (message.StartsWith("LinkMessage"))
+                else if (message.NotifyType == "LinkMessage")
                 {
                     notifyFormat = "NEW_FRI_MSG_NOTIFICATION";
-                }else if (message.StartsWith("ShareThingMessage"))
-				{
-					notifyFormat = "NEW_SHARE_NOTIFICATION";
-				}
+                }
+                else if (message.NotifyType == "ShareThingMessage")
+                {
+                    notifyFormat = "NEW_SHARE_NOTIFICATION";
+                }
                 else
                 {
                     return;
@@ -153,41 +183,36 @@ namespace Chicago.Extension
             });
         }
 
-        private void SendChicagoMessageToClient(string message, Sharelinker ss)
+        private void SendChicagoMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
         {
             Task.Run(() =>
             {
-                if (message.StartsWith("ChatMessage"))
+                if (message.NotifyType == "ChatMessage")
                 {
-                    this.SendJsonResponse(ss.Session, new { ChatId = message.Replace("ChatMessage:", "") }, ExtensionName, "UsrNewMsg");
+                    this.SendJsonResponse(ss.Session, new { ChatId = message.Info }, ExtensionName, "UsrNewMsg");
                 }
-                else if (message.StartsWith("LinkMessage"))
+                else if (message.NotifyType == "LinkMessage")
                 {
                     this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewLinkMsg");
                 }
-                else if (message.StartsWith("ShareThingMessage"))
+                else if (message.NotifyType == "ShareThingMessage")
                 {
                     this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewSTMsg");
                 }
             });
         }
 
-        public bool UnSubscribeUserSession(ICSharpServerSession session)
+        public bool UnSubscribeChannel(string channel)
         {
-            if (session != null)
+            try
             {
-                var sharelinker = session.User as Sharelinker;
-                if (sharelinker != null)
-                {
-                    using (var psClient = ChicagoServer.MessagePubSubServerClientManager.GetClient())
-                    {
-                        var userId = sharelinker.UserData.UserId;
-                        psClient.PublishMessage(userId, "UnSubscribe");
-                        return true;
-                    }
-                }
+                ChicagoServer.BahamutPubSubService.UnSubscribe(channel);
+                return true;
             }
-            return false;
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         [CommandInfo(1, "UsrNewMsg")]
@@ -200,16 +225,15 @@ namespace Chicago.Extension
         public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
         {
             string deviceToken = msg.DeviceToken;
-            var sharelinker = session.User as Sharelinker;
+            var appUser = session.User as BahamutAppUser;
             try
             {
-                sharelinker = registUserMap[sharelinker.UserData.UserId];
-                sharelinker.DeviceToken = deviceToken;
+                appUser = registUserMap[GenerateRegistUserMapKey(appUser.UserData.Appkey, appUser.UserData.UserId)];
+                appUser.DeviceToken = deviceToken;
             }
             catch (Exception)
             {
-                LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", sharelinker.UserData.UserId);
-                throw;
+                LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", appUser.UserData.UserId);
             }
         }
     }
