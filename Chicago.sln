@@ -31,6 +31,14 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSServerJsonProtocol", "..\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpServerFramework", "..\..\CSharpServerFramework\CSharpServerFramework\CSharpServerFramework.xproj", "{F60AF1AC-CF33-4DC8-8DF4-A017911C1527}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpServerFramework", "..\..\CSharpServerFramework\CSharpServerFramework\src\CSharpServerFramework\CSharpServerFramework.xproj", "{95C5CE52-F438-4FB2-8245-038B366D0CF1}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpServerFrameworkAbstract", "..\..\CSharpServerFramework\CSharpServerFrameworkAbstract\src\CSharpServerFrameworkAbstract\CSharpServerFrameworkAbstract.xproj", "{6D288983-6691-47A2-A057-3649A8563064}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSharpClientFramework", "..\..\CSharpServerFramework\CSharpClientFramework\src\CSharpClientFramework\CSharpClientFramework.xproj", "{E673009A-F331-4D23-9286-B2166BE43BE9}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CSServerJsonProtocol", "..\..\CSharpServerFramework\CSServerJsonProtocol\src\CSServerJsonProtocol\CSServerJsonProtocol.xproj", "{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +81,22 @@ Global
 		{F60AF1AC-CF33-4DC8-8DF4-A017911C1527}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F60AF1AC-CF33-4DC8-8DF4-A017911C1527}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F60AF1AC-CF33-4DC8-8DF4-A017911C1527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C5CE52-F438-4FB2-8245-038B366D0CF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C5CE52-F438-4FB2-8245-038B366D0CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C5CE52-F438-4FB2-8245-038B366D0CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C5CE52-F438-4FB2-8245-038B366D0CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D288983-6691-47A2-A057-3649A8563064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D288983-6691-47A2-A057-3649A8563064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D288983-6691-47A2-A057-3649A8563064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D288983-6691-47A2-A057-3649A8563064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E673009A-F331-4D23-9286-B2166BE43BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B91E64-470E-4DF0-9B13-A6AD4B7C5E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

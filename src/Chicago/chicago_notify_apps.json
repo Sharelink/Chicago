@@ -3,6 +3,10 @@
     {
       "uniqueId": "TorontoAPIServer",
       "appkey": "5e6c827f2fcb04e8fca80cf72db5ba004508246b"
+    },
+    {
+      "uniqueId": "VessageRESTfulServer",
+      "appkey": "7f9e267b33231abe16ea4b6c5fabae11b6103791"
     }
   ]
 }

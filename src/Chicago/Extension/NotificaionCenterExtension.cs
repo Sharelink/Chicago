@@ -99,13 +99,27 @@ namespace Chicago.Extension
                     try
                     {
                         var ss = registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, msgModel.ToUser)];
-                        if (ss.IsOnline)
+                        if (appUniqueId == "TorontoAPIServer")
                         {
-                            SendChicagoMessageToClient(msgModel, ss);
+                            if (ss.IsOnline)
+                            {
+                                SendChicagoMessageToClient(msgModel, ss);
+                            }
+                            else
+                            {
+                                SendAPNs(ss.DeviceToken, msgModel);
+                            }
                         }
                         else
                         {
-                            SendAPNs(ss.DeviceToken, msgModel);
+                            if (ss.IsOnline)
+                            {
+                                this.SendJsonResponse(ss.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
+                            }
+                            else
+                            {
+                                SendBahamutNotification(ss.DeviceToken, msgModel);
+                            }
                         }
                     }
                     catch (Exception)
@@ -115,6 +129,11 @@ namespace Chicago.Extension
                 };
                 subscription.SubscribeToChannels(channel);
             };
+        }
+
+        private void SendBahamutNotification(string deviceToken, BahamutPublishModel msgModel)
+        {
+            throw new NotImplementedException();
         }
 
         private void SendAPNs(string deviceToken,BahamutPublishModel message)
@@ -181,6 +200,11 @@ namespace Chicago.Extension
                     Console.WriteLine(result);
                 }
             });
+        }
+
+        private void SendBahamutMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
+        {
+
         }
 
         private void SendChicagoMessageToClient(BahamutPublishModel message, BahamutAppUser ss)

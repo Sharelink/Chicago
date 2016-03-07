@@ -47,7 +47,7 @@ namespace Chicago.Extension
     }
 
     [ValidateExtension]
-    [ExtensionInfo("SharelinkerValidation")]
+    [ExtensionInfo("BahamutUserValidation")]
     public class SharelinkerValidateExtension : ExtensionBaseEx
     {
         public SharelinkerValidateExtension() :
