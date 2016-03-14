@@ -17,7 +17,7 @@ namespace Chicago
             var fileTaget = new NLog.Targets.FileTarget();
             fileTaget.FileName = path;
             fileTaget.Name = "Chicago";
-            fileTaget.Layout = "${message};${exception}";
+            fileTaget.Layout = "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${message};${exception}";
             var logRule = new LoggingRule("Chicago", NLog.LogLevel.Debug, fileTaget);
             config.AddTarget(fileTaget);
             config.LoggingRules.Add(logRule);
