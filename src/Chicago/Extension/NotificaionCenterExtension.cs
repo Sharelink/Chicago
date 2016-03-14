@@ -22,6 +22,11 @@ namespace Chicago.Extension
             registUserMap = new Dictionary<string, BahamutAppUser>();
             ChicagoServer.Instance.OnSessionDisconnected += OnSessionDisconnected;
             Instance = this;
+            foreach (var app in Program.NotifyApps)
+            {
+                SubscribeToPubSubSystem(app.Value);
+            }
+
         }
 
         private void OnSessionDisconnected(object sender, CSServerEventArgs e)
@@ -63,7 +68,7 @@ namespace Chicago.Extension
 
         private string GenerateRegistUserMapKey(string appkey,string userId)
         {
-            var appUniqueId = ChicagoServer.GetAppUniqueIdByAppkey(appkey);
+            var appUniqueId = Program.GetAppUniqueIdByAppkey(appkey);
             if (string.IsNullOrWhiteSpace(appUniqueId) || string.IsNullOrWhiteSpace(userId))
             {
                 return null;
@@ -76,11 +81,8 @@ namespace Chicago.Extension
             return string.Format("{0}:{1}", appUniqueId, userId);
         }
 
-        public void SubscribeToPubSubSystem(string channel)
+        private void SubscribeToPubSubSystem(string channel)
         {
-#if DEBUG
-            LogManager.GetLogger("Debug").Debug("Subscribe Channel:" + channel);
-#endif
             using (var subscription = ChicagoServer.BahamutPubSubService.CreateSubscription())
             {
                 subscription.OnUnSubscribe = appUniqueId =>
@@ -95,40 +97,48 @@ namespace Chicago.Extension
 
                 subscription.OnMessage = (appUniqueId, message) =>
                 {
-                    var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
-                    try
-                    {
-                        var ss = registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, msgModel.ToUser)];
-                        if (appUniqueId == "TorontoAPIServer")
-                        {
-                            if (ss.IsOnline)
-                            {
-                                SendChicagoMessageToClient(msgModel, ss);
-                            }
-                            else
-                            {
-                                SendAPNs(ss.DeviceToken, msgModel);
-                            }
-                        }
-                        else
-                        {
-                            if (ss.IsOnline)
-                            {
-                                this.SendJsonResponse(ss.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
-                            }
-                            else
-                            {
-                                SendBahamutNotification(ss.DeviceToken, msgModel);
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
+                    HandleSubscriptionMessage(appUniqueId, message);
                 };
-                subscription.SubscribeToChannels(channel);
+                Task.Run(() =>
+                {
+                    subscription.SubscribeToChannels(channel);
+                });
             };
+        }
+
+        private void HandleSubscriptionMessage(string appUniqueId, string message)
+        {
+            var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
+            try
+            {
+                var ss = registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, msgModel.ToUser)];
+                if (appUniqueId == "TorontoAPIServer")
+                {
+                    if (ss.IsOnline)
+                    {
+                        SendChicagoMessageToClient(msgModel, ss);
+                    }
+                    else
+                    {
+                        SendAPNs(ss.DeviceToken, msgModel);
+                    }
+                }
+                else
+                {
+                    if (ss.IsOnline)
+                    {
+                        this.SendJsonResponse(ss.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
+                    }
+                    else
+                    {
+                        SendBahamutNotification(ss.DeviceToken, msgModel);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void SendBahamutNotification(string deviceToken, BahamutPublishModel msgModel)

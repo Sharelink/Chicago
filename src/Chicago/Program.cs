@@ -7,6 +7,7 @@ using CSServerJsonProtocol;
 using System.Threading;
 using CSharpServerFramework;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Chicago
 {
@@ -14,6 +15,33 @@ namespace Chicago
     {
         public static IConfiguration Configuration { get; private set; }
         public static ChicagoServer Server { get; private set; }
+        public static IDictionary<string, string> NotifyApps { get; private set; }
+
+        private static void LoadNotifyApps()
+        {
+            NotifyApps = new Dictionary<string, string>();
+            var apps = Program.Configuration.GetSection("NotifyApps").GetChildren();
+            foreach (var app in apps)
+            {
+                string key = app["appkey"];
+                string value = app["uniqueId"];
+                NotifyApps.Add(key, value);
+            }
+        }
+
+        public static string GetAppUniqueIdByAppkey(string appkey)
+        {
+
+            try
+            {
+                var id = NotifyApps[appkey];
+                return id;
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
 
         public static void Main(string[] args)
         {
@@ -60,6 +88,9 @@ namespace Chicago
 #endif
             NLog.LogManager.Configuration = nlogConfig;
 
+            //Notify Apps
+            LoadNotifyApps();
+
             try
             {
                 //CSServer
@@ -77,16 +108,10 @@ namespace Chicago
                 server.UseExtension(new BahamutAppValidateExtension());
 
                 //NotificationCenter Extension
-                ChicagoServer.LoadNotifyApps();
                 var notificationExt = new NotificaionCenterExtension();
                 server.UseExtension(notificationExt);
                 server.UseExtension(new HeartBeatExtension());
                 server.StartServer();
-                foreach (var notifyApp in ChicagoServer.NotifyApps)
-                {
-                    Console.WriteLine(notifyApp.Value);
-                    notificationExt.SubscribeToPubSubSystem(notifyApp.Value);
-                }
                 Thread.Sleep(Timeout.Infinite);
             }
             catch (Exception ex)
