@@ -72,6 +72,7 @@ namespace Chicago
                 server.UseLogger(ConsoleLogger.Instance);
 #endif
                 server.UseMessageRoute(new JsonRouteFilter());
+                server.UseExtension(new BahamutUserValidationExtension());
                 server.UseExtension(new SharelinkerValidateExtension());
                 server.UseExtension(new BahamutAppValidateExtension());
 

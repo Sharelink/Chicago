@@ -47,7 +47,7 @@ namespace Chicago.Extension
     }
 
     [ValidateExtension]
-    [ExtensionInfo("BahamutUserValidation")]
+    [ExtensionInfo("SharelinkerValidation")]
     public class SharelinkerValidateExtension : ExtensionBaseEx
     {
         public SharelinkerValidateExtension() :
@@ -108,6 +108,70 @@ namespace Chicago.Extension
         {
         }
     }
+
+    [ValidateExtension]
+    [ExtensionInfo("BahamutUserValidation")]
+    public class BahamutUserValidationExtension : ExtensionBaseEx
+    {
+        public BahamutUserValidationExtension() :
+            base(JsonMessageDeserializer.Instance)
+        {
+
+        }
+
+        [CommandInfo(1, "Login")]
+        public void Login(ICSharpServerSession session, dynamic msg)
+        {
+            string appToken = msg.AppToken;
+            string appkey = msg.Appkey;
+            string userId = msg.UserId;
+            Task.Run(async () =>
+            {
+                var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
+                if (result != null)
+                {
+                    var sharelinker = new BahamutAppUser()
+                    {
+                        Session = session,
+                        UserData = result,
+                        IsOnline = true
+                    };
+                    session.RegistUser(sharelinker);
+                    this.SendJsonResponse(session, new { IsValidate = "true" }, ExtensionName, "Login");
+                    LogManager.GetLogger("Info").Info("Login Success:{0}", userId);
+                    NotificaionCenterExtension.Instance.RegistUser(result.UserId, session);
+                }
+                else
+                {
+                    LogManager.GetLogger("Info").Info("Login Failed:{0}", userId);
+                    this.SendJsonResponse(session, new { IsValidate = "false" }, ExtensionName, "Login");
+                }
+            });
+        }
+
+        [CommandInfo(2, "Logout")]
+        public void Logout(ICSharpServerSession session, dynamic msg)
+        {
+            string appToken = msg.AppToken;
+            string appkey = msg.Appkey;
+            string userId = msg.UserId;
+            var user = session.User as BahamutAppUser;
+            if (NotificaionCenterExtension.Instance.RemoveUser(user))
+            {
+                LogManager.GetLogger("Info").Info("Logout Success:{0}", userId);
+                this.CloseSession(session);
+            }
+            else
+            {
+                LogManager.GetLogger("Info").Info("Logout Failed:{0}", userId);
+            }
+        }
+
+        public override void Init()
+        {
+        }
+    }
+
 
     public class BahamutAppUser : ICSharpServerUser
     {
