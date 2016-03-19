@@ -20,7 +20,6 @@ namespace Chicago
             Instance = this;
             var pbServerUrl = Program.Configuration["Data:MessagePubSubServer:url"].Replace("redis://", "");
             var psClientMgr = new BasicRedisClientManager(pbServerUrl);
-            psClientMgr.GetClient().CreateSubscription();
             BahamutPubSubService = new BahamutPubSubService(psClientMgr);
 
             var tokenServerUrl = Program.Configuration["Data:TokenServer:url"].Replace("redis://", "");
