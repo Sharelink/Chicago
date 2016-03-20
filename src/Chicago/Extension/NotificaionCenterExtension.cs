@@ -120,7 +120,7 @@ namespace Chicago.Extension
                     }
                     else
                     {
-                        SendAPNs(ss.DeviceToken, msgModel);
+                        UMengPushNotificationUtil.SendAPNs(ss.DeviceToken, msgModel);
                     }
                 }
                 else
@@ -146,7 +146,64 @@ namespace Chicago.Extension
             throw new NotImplementedException();
         }
 
-        private void SendAPNs(string deviceToken,BahamutPublishModel message)
+        private void SendChicagoMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
+        {
+            Task.Run(() =>
+            {
+                if (message.NotifyType == "ChatMessage")
+                {
+                    this.SendJsonResponse(ss.Session, new { ChatId = message.Info }, ExtensionName, "UsrNewMsg");
+                }
+                else if (message.NotifyType == "LinkMessage")
+                {
+                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewLinkMsg");
+                }
+                else if (message.NotifyType == "ShareThingMessage")
+                {
+                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewSTMsg");
+                }
+            });
+        }
+
+        public bool UnSubscribeChannel(string channel)
+        {
+            try
+            {
+                ChicagoServer.BahamutPubSubService.UnSubscribe(channel);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        [CommandInfo(1, "UsrNewMsg")]
+        public void NotifyUserNewMessage(ICSharpServerSession session, dynamic msg)
+        {
+            this.SendJsonResponse(session, new { ChatId = "" }, ExtensionName, "UsrNewMsg");
+        }
+
+        [CommandInfo(2, "RegistDeviceToken")]
+        public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
+        {
+            string deviceToken = msg.DeviceToken;
+            var appUser = session.User as BahamutAppUser;
+            try
+            {
+                appUser = registUserMap[GenerateRegistUserMapKey(appUser.UserData.Appkey, appUser.UserData.UserId)];
+                appUser.DeviceToken = deviceToken;
+            }
+            catch (Exception)
+            {
+                LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", appUser.UserData.UserId);
+            }
+        }
+    }
+
+    class UMengPushNotificationUtil
+    {
+        public static void SendAPNs(string deviceToken, BahamutPublishModel message)
         {
             if (string.IsNullOrWhiteSpace(deviceToken))
             {
@@ -210,65 +267,6 @@ namespace Chicago.Extension
                     Console.WriteLine(result);
                 }
             });
-        }
-
-        private void SendBahamutMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
-        {
-
-        }
-
-        private void SendChicagoMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
-        {
-            Task.Run(() =>
-            {
-                if (message.NotifyType == "ChatMessage")
-                {
-                    this.SendJsonResponse(ss.Session, new { ChatId = message.Info }, ExtensionName, "UsrNewMsg");
-                }
-                else if (message.NotifyType == "LinkMessage")
-                {
-                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewLinkMsg");
-                }
-                else if (message.NotifyType == "ShareThingMessage")
-                {
-                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewSTMsg");
-                }
-            });
-        }
-
-        public bool UnSubscribeChannel(string channel)
-        {
-            try
-            {
-                ChicagoServer.BahamutPubSubService.UnSubscribe(channel);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        [CommandInfo(1, "UsrNewMsg")]
-        public void NotifyUserNewMessage(ICSharpServerSession session, dynamic msg)
-        {
-            this.SendJsonResponse(session, new { ChatId = "" }, ExtensionName, "UsrNewMsg");
-        }
-
-        [CommandInfo(2, "RegistDeviceToken")]
-        public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
-        {
-            string deviceToken = msg.DeviceToken;
-            var appUser = session.User as BahamutAppUser;
-            try
-            {
-                appUser = registUserMap[GenerateRegistUserMapKey(appUser.UserData.Appkey, appUser.UserData.UserId)];
-                appUser.DeviceToken = deviceToken;
-            }
-            catch (Exception)
-            {
-                LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", appUser.UserData.UserId);
-            }
         }
     }
 }
