@@ -188,11 +188,20 @@ namespace Chicago.Extension
         public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
         {
             string deviceToken = msg.DeviceToken;
+            string deviceType = msg.DeviceType;
             var appUser = session.User as BahamutAppUser;
             try
             {
                 appUser = registUserMap[GenerateRegistUserMapKey(appUser.UserData.Appkey, appUser.UserData.UserId)];
                 appUser.DeviceToken = deviceToken;
+                if (string.IsNullOrWhiteSpace(deviceType))
+                {
+                    appUser.DeviceToken = BahamutAppUser.DeviceTypeIOS;
+                }
+                else
+                {
+                    appUser.DeviceType = deviceType;
+                }
             }
             catch (Exception)
             {
