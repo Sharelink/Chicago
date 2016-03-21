@@ -50,7 +50,10 @@ namespace Chicago.Extension
             try
             {   
                 var oldClientUser = registUserMap[key];
-                CloseSession(oldClientUser.Session);
+                if (oldClientUser.IsOnline)
+                {
+                    this.SendJsonResponse(oldClientUser.Session, new { }, "BahamutUserValidation", "OtherDeviceLogin");
+                }
                 registUserMap[key] = newUser;
             }
             catch (Exception)
