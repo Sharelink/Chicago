@@ -178,6 +178,7 @@ namespace Chicago.Extension
         public const string DeviceTypeIOS = "iOS";
         public const string DeviceTypeAndroid = "Android";
         public const string DeviceTypeWindows = "Windows";
+
         public ICSharpServerSession Session { get; set; }
         public AccountSessionData UserData { get; set; }
         public string DeviceToken { get; set; }
@@ -188,6 +189,30 @@ namespace Chicago.Extension
             get
             {
                 return true;
+            }
+        }
+
+        public bool IsIOSDevice
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeIOS;
+            }
+        }
+
+        public bool IsAndroidDevice
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeAndroid;
+            }
+        }
+
+        public bool IsWindowsDevice
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeWindows;
             }
         }
     }

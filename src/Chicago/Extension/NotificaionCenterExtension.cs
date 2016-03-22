@@ -115,57 +115,46 @@ namespace Chicago.Extension
             try
             {
                 var ss = registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, msgModel.ToUser)];
-                if (appUniqueId == "TorontoAPIServer")
+                if (ss.IsOnline)
                 {
-                    if (ss.IsOnline)
+                    if (appUniqueId == "Toronto")
                     {
-                        SendChicagoMessageToClient(msgModel, ss);
+                        this.SendJsonResponse(ss.Session, new { }, ExtensionName, msgModel.NotifyType);
                     }
                     else
                     {
-                        UMengPushNotificationUtil.SendAPNs(ss.DeviceToken, msgModel);
+                        this.SendJsonResponse(ss.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
                     }
                 }
                 else
                 {
-                    if (ss.IsOnline)
+                    if (ss.IsIOSDevice)
                     {
-                        this.SendJsonResponse(ss.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
-                    }
-                    else
-                    {
-                        SendBahamutNotification(ss.DeviceToken, msgModel);
+                        SendBahamutAPNSNotification(appUniqueId, ss.DeviceToken, msgModel);
                     }
                 }
             }
             catch (Exception)
             {
-
+                LogManager.GetLogger("Info").Info("No User Regist:{0}", msgModel.ToUser);
             }
         }
 
-        private void SendBahamutNotification(string deviceToken, BahamutPublishModel msgModel)
+        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, BahamutPublishModel msgModel)
         {
-            throw new NotImplementedException();
-        }
-
-        private void SendChicagoMessageToClient(BahamutPublishModel message, BahamutAppUser ss)
-        {
-            Task.Run(() =>
+            try
             {
-                if (message.NotifyType == "ChatMessage")
+                var umessageModel = Program.UMessageApps[appUniqueId];
+                Task.Run(async () =>
                 {
-                    this.SendJsonResponse(ss.Session, new { ChatId = message.Info }, ExtensionName, "UsrNewMsg");
-                }
-                else if (message.NotifyType == "LinkMessage")
-                {
-                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewLinkMsg");
-                }
-                else if (message.NotifyType == "ShareThingMessage")
-                {
-                    this.SendJsonResponse(ss.Session, new { }, ExtensionName, "UsrNewSTMsg");
-                }
-            });
+                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, msgModel.Info, umessageModel.Secret, umessageModel.Appkey);
+                });
+            }
+            catch (Exception)
+            {
+                LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
+            }
+
         }
 
         public bool UnSubscribeChannel(string channel)
@@ -181,13 +170,7 @@ namespace Chicago.Extension
             }
         }
 
-        [CommandInfo(1, "UsrNewMsg")]
-        public void NotifyUserNewMessage(ICSharpServerSession session, dynamic msg)
-        {
-            this.SendJsonResponse(session, new { ChatId = "" }, ExtensionName, "UsrNewMsg");
-        }
-
-        [CommandInfo(2, "RegistDeviceToken")]
+        [CommandInfo(1, "RegistDeviceToken")]
         public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
         {
             string deviceToken = msg.DeviceToken;
@@ -215,70 +198,39 @@ namespace Chicago.Extension
 
     class UMengPushNotificationUtil
     {
-        public static void SendAPNs(string deviceToken, BahamutPublishModel message)
+        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string notifyFormat, string app_master_secret, string appkey)
         {
-            if (string.IsNullOrWhiteSpace(deviceToken))
+            var timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now);
+            var method = "POST";
+            var url = "http://msg.umeng.com/api/send";
+            var p = new
             {
-                Console.WriteLine("Device Token is null");
-                return;
-            }
-            Task.Run(async () =>
-            {
-                string notifyFormat;
-                if (message.NotifyType == "ChatMessage")
+                appkey = appkey,
+                timestamp = timestamp,
+                device_tokens = deviceToken,
+                type = "unicast",
+                payload = new
                 {
-                    notifyFormat = "NEW_MSG_NOTIFICATION";
-                }
-                else if (message.NotifyType == "LinkMessage")
-                {
-                    notifyFormat = "NEW_FRI_MSG_NOTIFICATION";
-                }
-                else if (message.NotifyType == "ShareThingMessage")
-                {
-                    notifyFormat = "NEW_SHARE_NOTIFICATION";
-                }
-                else
-                {
-                    return;
-                }
-                var app_master_secret = "biru3uttfc5nqlfd0aqnm2kxzeivfnle";
-                var appkey = "5643e78367e58ec557005b9f";
-                var timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now);
-                var method = "POST";
-                var url = "http://msg.umeng.com/api/send";
-                var p = new
-                {
-                    appkey = appkey,
-                    timestamp = timestamp,
-                    device_tokens = deviceToken,
-                    type = "unicast",
-                    payload = new
+                    aps = new
                     {
-                        aps = new
-                        {
-                            alert = new { loc_key = notifyFormat },
-                            badge = 1,
-                            sound = "default"
-                        },
-                        display_type = "notification"
-                    }
-                };
-                var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(p).Replace("loc_key", "loc-key");
-                var md5 = new DBTek.Crypto.MD5_Hsr();
-                var sign = md5.HashString(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret)).ToLower();
-                var client = new HttpClient();
-                var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
-                var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
-                var result = await msg.Content.ReadAsStringAsync();
-                if (msg.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    LogManager.GetLogger("Info").Info("UMeng Message:" + result);
+                        alert = new { loc_key = notifyFormat },
+                        badge = 1,
+                        sound = "default"
+                    },
+                    display_type = "notification"
                 }
-                else
-                {
-                    Console.WriteLine(result);
-                }
-            });
+            };
+            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(p).Replace("loc_key", "loc-key");
+            var md5 = new DBTek.Crypto.MD5_Hsr();
+            var sign = md5.HashString(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret)).ToLower();
+            var client = new HttpClient();
+            var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
+            var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
+            var result = await msg.Content.ReadAsStringAsync();
+            if (msg.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                LogManager.GetLogger("Info").Info("UMeng Message:" + result);
+            }
         }
     }
 }

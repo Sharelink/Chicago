@@ -11,14 +11,21 @@ using System.Collections.Generic;
 
 namespace Chicago
 {
+    public class UMessageAppModel
+    {
+        public string Appkey { get; set; }
+        public string Secret { get; set; }
+    }
+
     public class Program
     {
         public static IConfiguration Configuration { get; private set; }
         public static ChicagoServer Server { get; private set; }
         public static IDictionary<string, string> NotifyApps { get; private set; }
-
+        public static IDictionary<string, UMessageAppModel> UMessageApps { get; private set; }
         private static void LoadNotifyApps()
         {
+            UMessageApps = new Dictionary<string, UMessageAppModel>();
             NotifyApps = new Dictionary<string, string>();
             var apps = Program.Configuration.GetSection("NotifyApps").GetChildren();
             foreach (var app in apps)
@@ -26,6 +33,11 @@ namespace Chicago
                 string key = app["appkey"];
                 string value = app["uniqueId"];
                 NotifyApps.Add(key, value);
+                UMessageApps.Add(value, new UMessageAppModel
+                {
+                    Appkey = app["umessage:appkey"],
+                    Secret = app["umessage:secret"]
+                });
             }
         }
 
@@ -68,7 +80,7 @@ namespace Chicago
             {
 #if DEBUG
                 configFile = "config_debug.json";
-                conBuilder.AddJsonFile("chicago_notify_apps.json");
+                conBuilder.AddJsonFile("notify_apps_debug.json");
                 Console.WriteLine("Debug Mode");
 #else
                 conBuilder.AddJsonFile("/etc/bahamut/chicago_notify_apps.json");
