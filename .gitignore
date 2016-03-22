@@ -220,3 +220,4 @@ FakesAssemblies/
 _Pvt_Extensions
 src/Chicago/project.lock.json
 src/Chicago/config_debug.json
+src/Chicago/notify_apps_debug.json
