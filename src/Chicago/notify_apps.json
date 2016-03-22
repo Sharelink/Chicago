@@ -1,0 +1,12 @@
+﻿{
+  "NotifyApps": [
+    {
+      "uniqueId": "Xxx",
+      "appkey": "***",
+      "umessage": {
+        "appkey": "***",
+        "secret": "***"
+      }
+    }
+  ]
+}
