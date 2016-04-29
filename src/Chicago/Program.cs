@@ -13,8 +13,12 @@ namespace Chicago
 {
     public class UMessageAppModel
     {
-        public string Appkey { get; set; }
-        public string Secret { get; set; }
+        public string AppkeyIOS { get; set; }
+        public string SecretIOS { get; set; }
+
+        public string AppkeyAndroid { get; set; }
+        public string SecretAndroid { get; set; }
+
     }
 
     public class Program
@@ -35,8 +39,11 @@ namespace Chicago
                 NotifyApps.Add(key, value);
                 UMessageApps.Add(value, new UMessageAppModel
                 {
-                    Appkey = app["umessage:appkey"],
-                    Secret = app["umessage:secret"]
+                    AppkeyIOS = app["umessage:ios:appkey"],
+                    SecretIOS = app["umessage:ios:secret"],
+
+                    AppkeyAndroid = app["umessage:android:appkey"],
+                    SecretAndroid = app["umessage:android:secret"]
                 });
             }
         }

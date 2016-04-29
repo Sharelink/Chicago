@@ -4,8 +4,14 @@
       "uniqueId": "Xxx",
       "appkey": "***",
       "umessage": {
-        "appkey": "***",
-        "secret": "***"
+        "ios": {
+          "appkey": "***",
+          "secret": "***"
+        },
+        "android": {
+          "appkey": "***",
+          "secret": "***"
+        }
       }
     }
   ]
