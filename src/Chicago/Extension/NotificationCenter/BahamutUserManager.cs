@@ -76,6 +76,13 @@ namespace Chicago.Extension
             }
         }
 
+        public bool RemoveUser(BahamutPublishModel msgModel)
+        {
+            dynamic msg = Newtonsoft.Json.JsonConvert.DeserializeObject(msgModel.Info);
+            var key = GenerateRegistUserMapKey(msg.Appkey, msg.ToUser);
+            return registUserMap.Remove(key);
+        }
+
         public void UpdateUserDeviceToken(BahamutAppUser appUser, string deviceToken, string deviceType)
         {
             try

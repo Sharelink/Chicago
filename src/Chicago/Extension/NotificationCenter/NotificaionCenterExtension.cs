@@ -70,6 +70,10 @@ namespace Chicago.Extension
                 {
                     userManager.RegistDeviceToken(msgModel, this);
                     return;
+                }else if(msgModel.NotifyType == "RemoveUserDevice")
+                {
+                    userManager.RemoveUser(msgModel);
+                    return;
                 }
                 var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
                 if (registedUser.IsOnline)
