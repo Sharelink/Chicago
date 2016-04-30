@@ -12,8 +12,10 @@ namespace Chicago.Extension
     [ExtensionInfo("NotificationCenter")]
     public class NotificaionCenterExtension : JsonExtensionBase
     {
+        private readonly string DEFAULT_NOTIFY_CMD = "BahamutNotify";
         public static NotificaionCenterExtension Instance { get; private set; }
         private BahamutUserManager userManager;
+
         public override void Init()
         {
             userManager = new BahamutUserManager();
@@ -63,10 +65,10 @@ namespace Chicago.Extension
 
         private void HandleSubscriptionMessage(string appUniqueId, string message)
         {
-            var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
             try
             {
-                if(msgModel.NotifyType == "RegistUserDevice")
+                var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
+                if (msgModel.NotifyType == "RegistUserDevice")
                 {
                     userManager.RegistDeviceToken(msgModel, this);
                     return;
@@ -78,21 +80,31 @@ namespace Chicago.Extension
                 var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
                 if (registedUser.IsOnline)
                 {
-                    if (appUniqueId == "Toronto")
+                    var cmd = string.IsNullOrWhiteSpace(msgModel.CustomCmd) ? DEFAULT_NOTIFY_CMD : msgModel.CustomCmd;
+                    object resObj = null;
+                    if(msgModel.NotifyType == null && msgModel.Info == null)
                     {
-                        this.SendJsonResponse(registedUser.Session, new { }, ExtensionName, msgModel.NotifyType);
+                        resObj = new { };
+                    }
+                    else if (msgModel.Info == null)
+                    {
+                        resObj = new { NotificationType = msgModel.NotifyType };
+                    }else if( msgModel.NotifyType == null)
+                    {
+                        resObj = new { Info = msgModel.Info };
                     }
                     else
                     {
-                        this.SendJsonResponse(registedUser.Session, new { NotificationType = msgModel.NotifyType, Info = msgModel.Info }, ExtensionName, "BahamutNotify");
+                        resObj = new { NotificationType = msgModel.NotifyType, Info = msgModel.Info };
                     }
+                    this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
                 }
                 else
                 {
-                    string notify = appUniqueId == "Toronto" ? msgModel.Info : msgModel.NotifyType;
                     if (registedUser.IsIOSDevice)
                     {
-                        SendBahamutAPNSNotification(appUniqueId, registedUser.DeviceToken, notify);
+                        dynamic notifyInfo = JsonConvert.DeserializeObject(msgModel.NotifyInfo);
+                        SendBahamutAPNSNotification(appUniqueId, registedUser.DeviceToken, (string)notifyInfo.LocKey);
                     }
                     else if (registedUser.IsAndroidDevice)
                     {
@@ -103,7 +115,7 @@ namespace Chicago.Extension
             }
             catch (Exception)
             {
-                LogManager.GetLogger("Info").Info("No User Regist:{0}", msgModel.ToUser);
+                LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", appUniqueId, message);
             }
         }
 
@@ -124,14 +136,19 @@ namespace Chicago.Extension
             }
         }
 
-        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, string notifyType)
+        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, string locKey)
         {
+            if(string.IsNullOrWhiteSpace(locKey))
+            {
+                LogManager.GetLogger("Warn").Warn("App={0},Device={1} :LocKey Is Null", appUniqueId, deviceToken);
+                return;
+            }
             try
             {
                 var umessageModel = Program.UMessageApps[appUniqueId];
                 Task.Run(async () =>
                 {
-                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, notifyType, umessageModel.AppkeyIOS, umessageModel.SecretIOS);
+                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, locKey, umessageModel.AppkeyIOS, umessageModel.SecretIOS);
                 });
             }
             catch (Exception)

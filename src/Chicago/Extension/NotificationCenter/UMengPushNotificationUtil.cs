@@ -15,6 +15,7 @@ namespace Chicago.Extension
         public string AfterOpen { get; set; }
         public string Custom { get; set; }
         public int BuilderId { get; set; }
+        public string LocKey { get; set; }
     }
 
     public class UMengPushNotificationUtil
@@ -45,7 +46,7 @@ namespace Chicago.Extension
             await PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string notifyFormat, string appkey, string app_master_secret)
+        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string locKey, string appkey, string app_master_secret)
         {
             var p = new
             {
@@ -57,7 +58,7 @@ namespace Chicago.Extension
                 {
                     aps = new
                     {
-                        alert = new { loc_key = notifyFormat },
+                        alert = new { loc_key = locKey },
                         badge = 1,
                         sound = "default"
                     },
