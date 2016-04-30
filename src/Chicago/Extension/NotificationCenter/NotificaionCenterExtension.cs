@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using NLog;
 using BahamutService.Service;
+using Newtonsoft.Json;
 
 namespace Chicago.Extension
 {
@@ -68,6 +69,7 @@ namespace Chicago.Extension
                 if(msgModel.NotifyType == "RegistUserDevice")
                 {
                     userManager.RegistDeviceToken(msgModel, this);
+                    return;
                 }
                 var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
                 if (registedUser.IsOnline)
@@ -90,7 +92,7 @@ namespace Chicago.Extension
                     }
                     else if (registedUser.IsAndroidDevice)
                     {
-                        SendAndroidMessageToUMessage(appUniqueId, registedUser.DeviceToken, notify);
+                        SendAndroidMessageToUMessage(appUniqueId, registedUser.DeviceToken, msgModel);
                     }
 
                 }
@@ -101,14 +103,15 @@ namespace Chicago.Extension
             }
         }
 
-        private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken, string notifyType)
+        private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken,  BahamutPublishModel model)
         {
             try
             {
-                var umessageModel = Program.UMessageApps[appUniqueId];
                 Task.Run(async () =>
                 {
-                    await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, notifyType, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid);
+                    var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
+                    var umessageModel = Program.UMessageApps[appUniqueId];
+                    await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
                 });
             }
             catch (Exception)

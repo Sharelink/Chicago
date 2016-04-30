@@ -7,10 +7,20 @@ using System.Threading.Tasks;
 
 namespace Chicago.Extension
 {
+    public class UMengMessageModel
+    {
+        public string Ticker { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public string AfterOpen { get; set; }
+        public string Custom { get; set; }
+        public int BuilderId { get; set; }
+    }
+
     public class UMengPushNotificationUtil
     {
 
-        public static async Task PushAndroidNotifyToUMessage(string deviceToken, string notifyFormat, string appkey, string app_master_secret)
+        public static async Task PushAndroidNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
         {
             var p = new
             {
@@ -22,16 +32,17 @@ namespace Chicago.Extension
                 {
                     body = new
                     {
-                        ticker = "New Message",
-                        title = "Vege",
-                        text = "New Message",
-                        after_open = "go_custom",
-                        custom = notifyFormat
+                        ticker = model.Ticker == null ? "app_name" : model.Ticker,
+                        title = model.Title == null ? "new_msg" : model.Title,
+                        text = model.Text,
+                        after_open = model.AfterOpen,
+                        custom = model.Custom,
+                        builder_id = model.BuilderId
                     },
                     display_type = "notification"
                 }
             };
-            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, p);
+            await PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
         public static async Task PushAPNSNotifyToUMessage(string deviceToken, string notifyFormat, string appkey, string app_master_secret)
@@ -53,10 +64,10 @@ namespace Chicago.Extension
                     display_type = "notification"
                 }
             };
-            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, p);
+            await PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        private static async Task PushNotifyToUMessage(string deviceToken, string notifyFormat, string app_master_secret,object msgParams)
+        private static async Task PushNotifyToUMessage(string deviceToken, string app_master_secret,object msgParams)
         {
             var method = "POST";
             var url = "http://msg.umeng.com/api/send";
