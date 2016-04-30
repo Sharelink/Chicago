@@ -22,12 +22,16 @@ namespace Chicago.Extension
                 {
                     body = new
                     {
+                        ticker = "New Message",
+                        title = "Vege",
+                        text = "New Message",
+                        after_open = "go_custom",
                         custom = notifyFormat
                     },
                     display_type = "notification"
                 }
             };
-            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, appkey, p);
+            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, p);
         }
 
         public static async Task PushAPNSNotifyToUMessage(string deviceToken, string notifyFormat, string appkey, string app_master_secret)
@@ -49,10 +53,10 @@ namespace Chicago.Extension
                     display_type = "notification"
                 }
             };
-            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, appkey, p);
+            await PushNotifyToUMessage(deviceToken, notifyFormat, app_master_secret, p);
         }
 
-        private static async Task PushNotifyToUMessage(string deviceToken, string notifyFormat, string app_master_secret, string appkey,object msgParams)
+        private static async Task PushNotifyToUMessage(string deviceToken, string notifyFormat, string app_master_secret,object msgParams)
         {
             var method = "POST";
             var url = "http://msg.umeng.com/api/send";
