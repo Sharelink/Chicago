@@ -29,6 +29,9 @@ namespace Chicago.Extension
                 timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now),
                 device_tokens = deviceToken,
                 type = "unicast",
+				#if DEBUG
+					production_mode = "false",
+				#endif
                 payload = new
                 {
                     body = new
@@ -46,7 +49,7 @@ namespace Chicago.Extension
             await PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string locKey, string appkey, string app_master_secret)
+        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
         {
             var p = new
             {
@@ -54,16 +57,20 @@ namespace Chicago.Extension
                 timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now),
                 device_tokens = deviceToken,
                 type = "unicast",
+				#if DEBUG
+					production_mode = "false",
+				#endif
                 payload = new
                 {
                     aps = new
                     {
-                        alert = new { loc_key = locKey },
+                        alert = new { loc_key = model.LocKey },
                         badge = 1,
                         sound = "default"
                     },
-                    display_type = "notification"
+					custom = model.Custom
                 }
+				
             };
             await PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }

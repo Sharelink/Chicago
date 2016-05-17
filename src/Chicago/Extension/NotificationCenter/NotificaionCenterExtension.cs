@@ -78,7 +78,10 @@ namespace Chicago.Extension
                     return;
                 }
                 var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
-                if (registedUser.IsOnline)
+				if (registedUser == null)
+				{
+					LogManager.GetLogger("Warn").Warn("App={0}:No User:{1}", appUniqueId, msgModel.ToUser);
+				}else if (registedUser.IsOnline)
                 {
                     var cmd = string.IsNullOrWhiteSpace(msgModel.CustomCmd) ? DEFAULT_NOTIFY_CMD : msgModel.CustomCmd;
                     object resObj = null;
@@ -103,8 +106,7 @@ namespace Chicago.Extension
                 {
                     if (registedUser.IsIOSDevice)
                     {
-                        dynamic notifyInfo = JsonConvert.DeserializeObject(msgModel.NotifyInfo);
-                        SendBahamutAPNSNotification(appUniqueId, registedUser.DeviceToken, (string)notifyInfo.LocKey);
+                        SendBahamutAPNSNotification(appUniqueId, registedUser.DeviceToken, msgModel);
                     }
                     else if (registedUser.IsAndroidDevice)
                     {
@@ -136,19 +138,15 @@ namespace Chicago.Extension
             }
         }
 
-        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, string locKey)
+        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, BahamutPublishModel model)
         {
-            if(string.IsNullOrWhiteSpace(locKey))
-            {
-                LogManager.GetLogger("Warn").Warn("App={0},Device={1} :LocKey Is Null", appUniqueId, deviceToken);
-                return;
-            }
             try
             {
-                var umessageModel = Program.UMessageApps[appUniqueId];
                 Task.Run(async () =>
                 {
-                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, locKey, umessageModel.AppkeyIOS, umessageModel.SecretIOS);
+					var umessageModel = Program.UMessageApps[appUniqueId];
+					var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
+                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS,umodel);
                 });
             }
             catch (Exception)

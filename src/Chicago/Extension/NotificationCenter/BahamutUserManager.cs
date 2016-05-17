@@ -127,12 +127,26 @@ namespace Chicago.Extension
 
         public BahamutAppUser GetUserWithAppUniqueId(string appUniqueId, string userId)
         {
-            return registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, userId)];
+            try
+            {
+                return registUserMap[GenerateRegistUserMapKeyByAppUniqueId(appUniqueId, userId)];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public BahamutAppUser GetUserWithAppKey(string appkey, string userId)
         {
-            return registUserMap[GenerateRegistUserMapKey(appkey, userId)];
+            try
+            {
+                return registUserMap[GenerateRegistUserMapKey(appkey, userId)];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
