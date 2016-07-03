@@ -90,8 +90,8 @@ namespace Chicago
                 conBuilder.AddJsonFile("notify_apps_debug.json",true,true);
                 Console.WriteLine("Debug Mode");
 #else
-                conBuilder.AddJsonFile("/etc/bahamut/chicago_notify_apps.json",true,true);
-                configFile = "/etc/bahamut/chicago.json";
+                conBuilder.AddJsonFile("/etc/bahamut/chicago/notify_apps.json",true,true);
+                configFile = "/etc/bahamut/chicago/config.json";
 #endif
             }
 
