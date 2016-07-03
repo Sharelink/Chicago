@@ -1,10 +1,6 @@
 {
   "version": "1.0.0-*",
   "description": "Chicago Console Application",
-  "authors": [ "广杰" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
 
   "dependencies": {
     "BahamutService": "1.0.0-*",
@@ -22,7 +18,9 @@
   },
 
   "frameworks": {
-    "dnx451": {
+    "net451": {
     }
-  }
+  },
+
+  "runtimes": { "ubuntu.14.04-x64": {} }
 }

@@ -1,18 +1,14 @@
 {
   "version": "1.0.0-*",
   "description": "ChicagoClientLib Class Library",
-  "authors": [ "cplov" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
 
   "dependencies": {
     "CSharpClientFramework": "1.0.0-*",
     "CSServerJsonProtocol": "1.0.0-*",
-    "Newtonsoft.Json": "8.0.2"
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }
