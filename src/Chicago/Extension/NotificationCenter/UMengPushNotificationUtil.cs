@@ -22,7 +22,7 @@ namespace Chicago.Extension
     public class UMengPushNotificationUtil
     {
 
-        public static async Task PushAndroidNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
+        public static void PushAndroidNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
         {
             var p = new
             {
@@ -47,10 +47,10 @@ namespace Chicago.Extension
                     display_type = "notification"
                 }
             };
-            await PushNotifyToUMessage(deviceToken, app_master_secret, p);
+            PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        public static async Task PushAPNSNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
+        public static void PushAPNSNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
         {
             var p = new
             {
@@ -73,24 +73,24 @@ namespace Chicago.Extension
                 }
 				
             };
-            await PushNotifyToUMessage(deviceToken, app_master_secret, p);
+            PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        private static async Task PushNotifyToUMessage(string deviceToken, string app_master_secret,object msgParams)
+        private static void PushNotifyToUMessage(string deviceToken, string app_master_secret,object msgParams)
         {
-            var method = "POST";
-            var url = "http://msg.umeng.com/api/send";
-            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams).Replace("loc_key", "loc-key");
-            
-            var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
-            var client = new HttpClient();
-            var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
-            var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
-            var result = await msg.Content.ReadAsStringAsync();
-            if (msg.StatusCode != System.Net.HttpStatusCode.OK)
+            Task.Run(async () =>
             {
-                LogManager.GetLogger("Info").Info("UMeng Message:" + result);
-            }
+                var method = "POST";
+                var url = "http://msg.umeng.com/api/send";
+                var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams).Replace("loc_key", "loc-key");
+
+                var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
+                var client = new HttpClient();
+                var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
+                var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
+                var result = await msg.Content.ReadAsStringAsync();
+                LogManager.GetLogger("Info").Info("Push UMeng Message:" + result);
+            });
         }
     }
 }

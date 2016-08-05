@@ -125,11 +125,11 @@ namespace Chicago.Extension
         {
             try
             {
-                Task.Run(async () =>
+                Task.Run(() =>
                 {
                     var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                     var umessageModel = Program.UMessageApps[appUniqueId];
-                    await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
+                    UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
                 });
             }
             catch (Exception)
@@ -142,11 +142,11 @@ namespace Chicago.Extension
         {
             try
             {
-                Task.Run(async () =>
+                Task.Run(() =>
                 {
 					var umessageModel = Program.UMessageApps[appUniqueId];
 					var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
-                    await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS,umodel);
+                    UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS,umodel);
                 });
             }
             catch (Exception)
