@@ -1,0 +1,44 @@
+﻿{
+
+  "ServerLog": "/home/deployment/logs/chicago/9657/server.log",
+
+  "Log": {
+    "fileLoggers": [
+      {
+        "name": "Main",
+        "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${level:uppercase=true}:${message};${exception}",
+        "namePattern": "Main",
+        "minLevel": "Debug",
+        "fileName": "/home/deployment/logs/chicago/9657/main.log"
+      },
+      {
+        "name": "Route",
+        "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${message}",
+        "namePattern": "Route",
+        "logLevel": "Info",
+        "fileName": "/home/deployment/logs/chicago/9657/route.log"
+      },
+      {
+        "name": "Error",
+        "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${message}->${exception}",
+        "namePattern": "*",
+        "logLevel": "Error",
+        "fileName": "/home/deployment/logs/chicago/9657/error.log"
+      },
+      {
+        "name": "Info",
+        "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${message}",
+        "namePattern": "Info",
+        "logLevel": "Info",
+        "fileName": "/home/deployment/logs/chicago/9657/info.log"
+      },
+      {
+        "name": "Warning",
+        "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${message}",
+        "namePattern": "*",
+        "logLevel": "Warn",
+        "fileName": "/home/deployment/logs/chicago/9657/warning.log"
+      }
+    ]
+  }
+}
