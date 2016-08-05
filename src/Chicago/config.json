@@ -20,6 +20,7 @@
       "appkey": "e1c91545bdb803aaeba2f5d4c86308327b93a2e2",
       "url": "chicago://chicago.sharelink.online:6789"
     },
+
     "MessagePubSubServer": {
       "url": "redis://$psw@pubsub.sharelink.online:6379"
     },
@@ -27,47 +28,11 @@
     "TokenServer": {
       "url": "redis://$psw@token.sharelink.online:6379"
     },
-    
-    "ServerLog": "/home/deployment/logs/Chicago/9657/server.log",
 
-    "Log": {
-      "fileLoggers": [
-        {
-          "name": "Main",
-          "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${level:uppercase=true}:${message};${exception}",
-          "namePattern": "Main",
-          "minLevel": "Debug",
-          "fileName": "/home/deployment/logs/Chicago/9657/main.log"
-        },
-        {
-          "name": "Route",
-          "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${message}",
-          "namePattern": "Route",
-          "logLevel": "Info",
-          "fileName": "/home/deployment/logs/Chicago/9657/route.log"
-        },
-        {
-          "name": "Error",
-          "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${message}->${exception}",
-          "namePattern": "*",
-          "logLevel": "Error",
-          "fileName": "/home/deployment/logs/Chicago/9657/error.log"
-        },
-        {
-          "name": "Info",
-          "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${message}",
-          "namePattern": "Info",
-          "logLevel": "Info",
-          "fileName": "/home/deployment/logs/Chicago/9657/info.log"
-        },
-        {
-          "name": "Warning",
-          "layoutFormat": "${date:format=yyyy-MM-dd HH\\:mm\\:ss} ${logger}:${message}",
-          "namePattern": "*",
-          "logLevel": "Warn",
-          "fileName": "/home/deployment/logs/Chicago/9657/warning.log"
-        }
-      ]
-    }
+    "ConfigRoot": ".",
+
+    "LogConfig": "logsettings.json",
+
+    "NotifyAppsConfig": "notify_apps.json"
   }
 }

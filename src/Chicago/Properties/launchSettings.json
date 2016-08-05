@@ -1,3 +1,9 @@
 {
-  "profiles": {}
+  "profiles": {
+    "Chicago": {
+      "commandName": "Chicago",
+      "commandLineArgs": "--config config_debug.json",
+      "workingDirectory": "."
+    }
+  }
 }

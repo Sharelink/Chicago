@@ -8,6 +8,7 @@ using System.Threading;
 using CSharpServerFramework;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Chicago
 {
@@ -64,43 +65,29 @@ namespace Chicago
 
         public static void Main(string[] args)
         {
-            var conBuilder = new ConfigurationBuilder();
-            conBuilder.AddEnvironmentVariables();
-            string configFile = "";
-            for (int i = 0; i < args.Length; i++)
+            var baseConfigBuilder = new ConfigurationBuilder();
+            baseConfigBuilder.SetBasePath(Directory.GetCurrentDirectory());
+            baseConfigBuilder.AddCommandLine(args);
+            baseConfigBuilder.AddEnvironmentVariables();
+            var configFile = baseConfigBuilder.Build()["config"];
+            if (string.IsNullOrEmpty(configFile))
             {
-                if (args[i] == "--config")
-                {
-                    try
-                    {
-                        configFile = args[i + 1];
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("--config no config file path");
-                        throw;
-                    }
-                }
+                Console.WriteLine("No Config File");
+                Console.WriteLine("Need Parameter \"--config path\"");
+                return;
             }
-
-            if (string.IsNullOrWhiteSpace(configFile))
-            {
-#if DEBUG
-                configFile = "config_debug.json";
-                conBuilder.AddJsonFile("notify_apps_debug.json",true,true);
-                Console.WriteLine("Debug Mode");
-#else
-                conBuilder.AddJsonFile("/etc/bahamut/chicago/notify_apps.json",true,true);
-                configFile = "/etc/bahamut/chicago/config.json";
-#endif
-            }
-
-            conBuilder.AddJsonFile(configFile);
-            Configuration = conBuilder.Build();
+            baseConfigBuilder.AddJsonFile(configFile, true, true);
+            var baseConfig = baseConfigBuilder.Build();
+            var logConfigFile = baseConfig["Data:LogConfig"];
+            var notifyAppsConfigFile = baseConfig["Data:NotifyAppsConfig"];
+            baseConfigBuilder
+                .AddJsonFile(logConfigFile, true, true)
+                .AddJsonFile(notifyAppsConfigFile, true, true);
+            Configuration = baseConfigBuilder.Build();
 
             //Nlog
             var nlogConfig = new NLog.Config.LoggingConfiguration();
-            BahamutCommon.LoggerLoaderHelper.LoadLoggerToLoggingConfig(nlogConfig, Configuration, "Data:Log:fileLoggers");
+            BahamutCommon.LoggerLoaderHelper.LoadLoggerToLoggingConfig(nlogConfig, Configuration, "Log:fileLoggers");
 
 #if DEBUG
             BahamutCommon.LoggerLoaderHelper.AddConsoleLoggerToLogginConfig(nlogConfig);
@@ -117,7 +104,7 @@ namespace Chicago
                 Server = server;
                 server.UseNetConfig(new NetConfigReader());
                 server.UseServerConfig(new ServerConfigReader());
-                server.UseLogger(new FileLogger(Configuration["Data:ServerLog"]));
+                server.UseLogger(new FileLogger(Configuration["ServerLog"]));
 #if DEBUG
                 server.UseLogger(ConsoleLogger.Instance);
 #endif
