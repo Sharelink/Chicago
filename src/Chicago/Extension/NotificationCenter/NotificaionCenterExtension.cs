@@ -95,7 +95,7 @@ namespace Chicago.Extension
             }
             else
             {
-                var deviceToken = string.IsNullOrWhiteSpace(registedUser.DeviceToken) ? BahamutUserManager.GetUserDeviceToken(msgModel.ToUser) : registedUser.DeviceToken;
+                var deviceToken = registedUser == null || string.IsNullOrWhiteSpace(registedUser.DeviceToken) ? BahamutUserManager.GetUserDeviceToken(msgModel.ToUser) : registedUser.DeviceToken;
                 if (string.IsNullOrWhiteSpace(deviceToken))
                 {
                     LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", appUniqueId, msgModel.ToUser);
