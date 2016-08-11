@@ -12,6 +12,7 @@ namespace Chicago.Extension
 {
     class BahamutUserManager
     {
+        private static TimeSpan DeviceTokenExpireTime = TimeSpan.FromDays(14);
         private IDictionary<string, BahamutAppUser> registUserMap;
         public BahamutUserManager()
         {
@@ -56,7 +57,7 @@ namespace Chicago.Extension
             user.DeviceToken = msg.DeviceToken;
             user.DeviceType = msg.DeviceType;
             user.IsOnline = false;
-
+            ChicagoServer.BahamutPubSubService.RegistUserDevice(user.UserData.UserId, user.DeviceToken, DeviceTokenExpireTime);
             var key = GenerateRegistUserMapKey(user.UserData.Appkey, user.UserData.UserId);
             try
             {
@@ -87,6 +88,7 @@ namespace Chicago.Extension
         {
             try
             {
+                ChicagoServer.BahamutPubSubService.RegistUserDevice(appUser.UserData.UserId, appUser.DeviceToken, DeviceTokenExpireTime);
                 appUser.DeviceToken = deviceToken;
                 if (string.IsNullOrWhiteSpace(deviceType))
                 {
@@ -102,6 +104,11 @@ namespace Chicago.Extension
                 LogManager.GetLogger("Info").Info("Regist Device Token Error:{0}", appUser.UserData.UserId);
             }
 
+        }
+
+        public static string GetUserDeviceToken(string userId)
+        {
+            return ChicagoServer.BahamutPubSubService.GetUserDeviceToken(userId, DeviceTokenExpireTime);
         }
 
         public bool RemoveUser(BahamutAppUser user)

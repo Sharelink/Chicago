@@ -71,54 +71,67 @@ namespace Chicago.Extension
                 if (msgModel.NotifyType == "RegistUserDevice")
                 {
                     userManager.RegistDeviceToken(msgModel, this);
-                    return;
                 }else if(msgModel.NotifyType == "RemoveUserDevice")
                 {
                     userManager.RemoveUser(msgModel);
-                    return;
-                }
-                var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
-				if (registedUser == null)
-				{
-					LogManager.GetLogger("Warn").Warn("App={0}:No User:{1}", appUniqueId, msgModel.ToUser);
-				}else if (registedUser.IsOnline)
-                {
-                    var cmd = string.IsNullOrWhiteSpace(msgModel.CustomCmd) ? DEFAULT_NOTIFY_CMD : msgModel.CustomCmd;
-                    object resObj = null;
-                    if(msgModel.NotifyType == null && msgModel.Info == null)
-                    {
-                        resObj = new { };
-                    }
-                    else if (msgModel.Info == null)
-                    {
-                        resObj = new { NotificationType = msgModel.NotifyType };
-                    }else if( msgModel.NotifyType == null)
-                    {
-                        resObj = new { Info = msgModel.Info };
-                    }
-                    else
-                    {
-                        resObj = new { NotificationType = msgModel.NotifyType, Info = msgModel.Info };
-                    }
-                    this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
                 }
                 else
                 {
-                    if (registedUser.IsIOSDevice)
-                    {
-                        SendBahamutAPNSNotification(appUniqueId, registedUser.DeviceToken, msgModel);
-                    }
-                    else if (registedUser.IsAndroidDevice)
-                    {
-                        SendAndroidMessageToUMessage(appUniqueId, registedUser.DeviceToken, msgModel);
-                    }
-
+                    HandleNotificationMessage(appUniqueId, msgModel);
                 }
             }
             catch (Exception)
             {
                 LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", appUniqueId, message);
             }
+        }
+
+        private void HandleNotificationMessage(string appUniqueId, BahamutPublishModel msgModel)
+        {
+            var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
+            if (registedUser != null && registedUser.IsOnline)
+            {
+                SendBahamutNotifyCmd(msgModel, registedUser);
+            }
+            else
+            {
+                var deviceToken = string.IsNullOrWhiteSpace(registedUser.DeviceToken) ? BahamutUserManager.GetUserDeviceToken(msgModel.ToUser) : registedUser.DeviceToken;
+                if (string.IsNullOrWhiteSpace(deviceToken))
+                {
+                    LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", appUniqueId, msgModel.ToUser);
+                }
+                else if (registedUser.IsIOSDevice)
+                {
+                    SendBahamutAPNSNotification(appUniqueId, deviceToken, msgModel);
+                }
+                else if (registedUser.IsAndroidDevice)
+                {
+                    SendAndroidMessageToUMessage(appUniqueId, deviceToken, msgModel);
+                }
+            }
+        }
+
+        private void SendBahamutNotifyCmd(BahamutPublishModel msgModel, BahamutAppUser registedUser)
+        {
+            var cmd = string.IsNullOrWhiteSpace(msgModel.CustomCmd) ? DEFAULT_NOTIFY_CMD : msgModel.CustomCmd;
+            object resObj = null;
+            if (msgModel.NotifyType == null && msgModel.Info == null)
+            {
+                resObj = new { };
+            }
+            else if (msgModel.Info == null)
+            {
+                resObj = new { NotificationType = msgModel.NotifyType };
+            }
+            else if (msgModel.NotifyType == null)
+            {
+                resObj = new { Info = msgModel.Info };
+            }
+            else
+            {
+                resObj = new { NotificationType = msgModel.NotifyType, Info = msgModel.Info };
+            }
+            this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
         }
 
         private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken,  BahamutPublishModel model)
