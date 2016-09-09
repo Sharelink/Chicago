@@ -172,47 +172,18 @@ namespace Chicago.Extension
         }
     }
 
-
     public class BahamutAppUser : ICSharpServerUser
     {
-        public const string DeviceTypeIOS = "iOS";
-        public const string DeviceTypeAndroid = "Android";
-        public const string DeviceTypeWindows = "Windows";
-
+        
         public ICSharpServerSession Session { get; set; }
         public AccountSessionData UserData { get; set; }
-        public string DeviceToken { get; set; }
-        public string DeviceType { get; set; }
+        public DeviceToken DeviceToken { get; set; }
         public bool IsOnline { get; set; }
         public bool IsUserValidate
         {
             get
             {
                 return true;
-            }
-        }
-
-        public bool IsIOSDevice
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeIOS;
-            }
-        }
-
-        public bool IsAndroidDevice
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeAndroid;
-            }
-        }
-
-        public bool IsWindowsDevice
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(DeviceType) || DeviceType == DeviceTypeWindows;
             }
         }
     }

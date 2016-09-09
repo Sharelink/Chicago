@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NLog;
 using BahamutService.Service;
 using Newtonsoft.Json;
+using BahamutService.Model;
 
 namespace Chicago.Extension
 {
@@ -70,7 +71,7 @@ namespace Chicago.Extension
                 var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
                 if (msgModel.NotifyType == "RegistUserDevice")
                 {
-                    userManager.RegistDeviceToken(msgModel, this);
+                    userManager.RegistDeviceToken(msgModel);
                 }else if(msgModel.NotifyType == "RemoveUserDevice")
                 {
                     userManager.RemoveUser(msgModel);
@@ -88,26 +89,22 @@ namespace Chicago.Extension
 
         private void HandleNotificationMessage(string appUniqueId, BahamutPublishModel msgModel)
         {
-            var registedUser = userManager.GetUserWithAppUniqueId(appUniqueId, msgModel.ToUser);
-            if (registedUser != null && registedUser.IsOnline)
+            var deviceToken = BahamutUserManager.GetUserDeviceToken(msgModel.ToUser);
+
+            if (deviceToken != null && deviceToken.IsValidToken())
             {
-                SendBahamutNotifyCmd(msgModel, registedUser);
+                if (deviceToken.IsIOSDevice())
+                {
+                    SendBahamutAPNSNotification(appUniqueId, deviceToken.Token, msgModel);
+                }
+                else if (deviceToken.IsAndroidDevice())
+                {
+                    SendAndroidMessageToUMessage(appUniqueId, deviceToken.Token, msgModel);
+                }
             }
             else
             {
-                var deviceToken = registedUser == null || string.IsNullOrWhiteSpace(registedUser.DeviceToken) ? BahamutUserManager.GetUserDeviceToken(msgModel.ToUser) : registedUser.DeviceToken;
-                if (string.IsNullOrWhiteSpace(deviceToken))
-                {
-                    LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", appUniqueId, msgModel.ToUser);
-                }
-                else if (registedUser.IsIOSDevice)
-                {
-                    SendBahamutAPNSNotification(appUniqueId, deviceToken, msgModel);
-                }
-                else if (registedUser.IsAndroidDevice)
-                {
-                    SendAndroidMessageToUMessage(appUniqueId, deviceToken, msgModel);
-                }
+                LogManager.GetLogger("Info").Warn("App={0}:User Not Regist DeviceToken:{1}", appUniqueId, msgModel.ToUser);
             }
         }
 
@@ -185,19 +182,24 @@ namespace Chicago.Extension
         public void RegistDeviceToken(ICSharpServerSession session, dynamic msg)
         {
             var appUser = session.User as BahamutAppUser;
-            string deviceToken = msg.DeviceToken;
-            string deviceType = msg.DeviceType;
-            userManager.UpdateUserDeviceToken(appUser, deviceToken, deviceType);
+
+            var dt = new DeviceToken
+            {
+                Token = msg.DeviceToken,
+                Type = msg.DeviceType
+            };
+            userManager.UpdateUserDeviceToken(appUser, dt);
         }
 
         public void RegistUser(string userId, ICSharpServerSession session)
         {
-            userManager.RegistUser(userId, session, this);
+            //userManager.RegistUser(userId, session, this);
         }
 
         public bool RemoveUser(BahamutAppUser user)
         {
-            return userManager.RemoveUser(user);
+            //return userManager.RemoveUser(user);
+            return false;
         }
     }
         

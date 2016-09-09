@@ -89,7 +89,10 @@ namespace Chicago.Extension
                 var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
                 var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
                 var result = await msg.Content.ReadAsStringAsync();
-                LogManager.GetLogger("Info").Info("Push UMeng Message:" + result);
+                if (string .IsNullOrWhiteSpace(result) || !result.Contains("SUCCESS"))
+                {
+                    LogManager.GetLogger("Warn").Info("Push UMeng Message:" + result);
+                }
             });
         }
     }
