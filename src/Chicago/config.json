@@ -22,11 +22,33 @@
     },
 
     "MessagePubSubServer": {
-      "url": "redis://$psw@pubsub.sharelink.online:6379"
+      "minPoolSize": 3,
+      "maxPoolSize": 10,
+      "masters": [
+        {
+          "url": "redis://$psw@pubsub.sharelink.online:6379"
+        }
+      ],
+      "slaves": [
+        {
+          "url": "redis://$psw@pubsub.sharelink.online:6379"
+        }
+      ]
     },
 
     "TokenServer": {
-      "url": "redis://$psw@token.sharelink.online:6379"
+      "minPoolSize": 3,
+      "maxPoolSize": 10,
+      "masters": [
+        {
+          "url": "redis://$psw@token.sharelink.online:6379"
+        }
+      ],
+      "slaves": [
+        {
+          "url": "redis://$psw@token.sharelink.online:6379"
+        }
+      ]
     },
 
     "ConfigRoot": ".",

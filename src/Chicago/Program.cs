@@ -87,7 +87,7 @@ namespace Chicago
 
             //Nlog
             var nlogConfig = new NLog.Config.LoggingConfiguration();
-            BahamutCommon.LoggerLoaderHelper.LoadLoggerToLoggingConfig(nlogConfig, Configuration, "Log:fileLoggers");
+            BahamutCommon.LoggerLoaderHelper.LoadLoggerToLoggingConfig(nlogConfig, Configuration, "Logger:fileLoggers");
 
 #if DEBUG
             BahamutCommon.LoggerLoaderHelper.AddConsoleLoggerToLogginConfig(nlogConfig);

@@ -4,6 +4,7 @@ using BahamutService;
 using BahamutService.Service;
 using System.Collections;
 using System.Collections.Generic;
+using DataLevelDefines;
 
 namespace Chicago
 {
@@ -18,12 +19,10 @@ namespace Chicago
         {
             base.ServerInit();
             Instance = this;
-            var pbServerUrl = Program.Configuration["Data:MessagePubSubServer:url"].Replace("redis://", "");
-            var psClientMgr = new BasicRedisClientManager(pbServerUrl);
+            var psClientMgr = DBClientManagerBuilder.GenerateRedisClientManager(Program.Configuration.GetSection("Data:MessagePubSubServer"));
             BahamutPubSubService = new BahamutPubSubService(psClientMgr);
 
-            var tokenServerUrl = Program.Configuration["Data:TokenServer:url"].Replace("redis://", "");
-            var tokenServerClientManager = new PooledRedisClientManager(tokenServerUrl);
+            var tokenServerClientManager = DBClientManagerBuilder.GenerateRedisClientManager(Program.Configuration.GetSection("Data:TokenServer"));
             TokenService = new TokenService(tokenServerClientManager);
         }
 

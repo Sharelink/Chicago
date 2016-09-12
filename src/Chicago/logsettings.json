@@ -2,7 +2,7 @@
 
   "ServerLog": "/home/deployment/logs/chicago/9657/server.log",
 
-  "Log": {
+  "Logger": {
     "fileLoggers": [
       {
         "name": "Main",
