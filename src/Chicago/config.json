@@ -17,9 +17,17 @@
 
     "App": {
       "appname": "ChicagoServer",
-      "appkey": "e1c91545bdb803aaeba2f5d4c86308327b93a2e2",
+      "appkey": "851753bffd33391e5db003ed2845016f2021b497",
       "url": "chicago://chicago.sharelink.online:6789"
     },
+
+    "ConfigRoot": ".",
+
+    "LogConfig": "logsettings.json",
+
+    "NotifyAppsConfig": "notify_apps.json",
+
+    "AppChannelConfig": "/etc/bahamut/bahamut_app_channel.json",
 
     "MessagePubSubServer": {
       "minPoolSize": 3,
@@ -49,12 +57,6 @@
           "url": "redis://$psw@token.sharelink.online:6379"
         }
       ]
-    },
-
-    "ConfigRoot": ".",
-
-    "LogConfig": "logsettings.json",
-
-    "NotifyAppsConfig": "notify_apps.json"
+    }
   }
 }

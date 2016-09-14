@@ -57,7 +57,7 @@ namespace Chicago
                 var id = NotifyApps[appkey];
                 return id;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return null;
             }
@@ -182,16 +182,7 @@ namespace Chicago
             }
             catch (Exception)
             {
-                try
-                {
-                    var ip = Dns.GetHostEntry(host).AddressList.First();
-                    return ip;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-                
+                return IPAddress.Loopback;
             }
             
         }

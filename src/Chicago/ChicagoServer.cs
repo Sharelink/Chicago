@@ -1,5 +1,4 @@
 ﻿using CSharpServerFramework;
-using ServiceStack.Redis;
 using BahamutService;
 using BahamutService.Service;
 using System.Collections;
@@ -14,15 +13,14 @@ namespace Chicago
         public static ChicagoServer Instance { get; private set; }
         public static BahamutPubSubService BahamutPubSubService { get; private set; }
 
-
         protected override void ServerInit()
         {
             base.ServerInit();
             Instance = this;
-            var psClientMgr = DBClientManagerBuilder.GenerateRedisClientManager(Program.Configuration.GetSection("Data:MessagePubSubServer"));
+            var psClientMgr = DBClientManagerBuilder.GenerateRedisConnectionMultiplexer(Program.Configuration.GetSection("Data:MessagePubSubServer"));
             BahamutPubSubService = new BahamutPubSubService(psClientMgr);
 
-            var tokenServerClientManager = DBClientManagerBuilder.GenerateRedisClientManager(Program.Configuration.GetSection("Data:TokenServer"));
+            var tokenServerClientManager = DBClientManagerBuilder.GenerateRedisConnectionMultiplexer(Program.Configuration.GetSection("Data:TokenServer"));
             TokenService = new TokenService(tokenServerClientManager);
         }
 

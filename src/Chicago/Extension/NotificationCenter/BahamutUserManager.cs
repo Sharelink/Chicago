@@ -14,8 +14,8 @@ namespace Chicago.Extension
     class BahamutUserManager
     {
         private static TimeSpan DeviceTokenExpireTime = TimeSpan.FromDays(14);
-        
-        public void RegistDeviceToken(BahamutPublishModel msgModel)
+
+        public async Task<bool> RegistDeviceTokenAsync(BahamutPublishModel msgModel)
         {
             dynamic msg = Newtonsoft.Json.JsonConvert.DeserializeObject(msgModel.Info);
             var dt = new DeviceToken
@@ -23,40 +23,55 @@ namespace Chicago.Extension
                 Token = msg.DeviceToken,
                 Type = msg.DeviceType
             };
-            ChicagoServer.BahamutPubSubService.RegistUserDevice(msgModel.ToUser, dt, DeviceTokenExpireTime);
+            return await ChicagoServer.BahamutPubSubService.RegistUserDeviceAsync(msgModel.ToUser, dt, DeviceTokenExpireTime);
         }
 
-        public bool RemoveUser(BahamutPublishModel msgModel)
+        public async Task<bool> RemoveUserAsync(BahamutPublishModel msgModel)
         {
-            return ChicagoServer.BahamutPubSubService.RemoveUserDevice(msgModel.ToUser);
+            return await ChicagoServer.BahamutPubSubService.RemoveUserDeviceAsync(msgModel.ToUser);
         }
 
-        public void UpdateUserDeviceToken(BahamutAppUser appUser, DeviceToken deviceToken)
+        public async Task<bool> UpdateUserDeviceTokenAynce(BahamutAppUser appUser, DeviceToken deviceToken)
         {
             try
             {
-                ChicagoServer.BahamutPubSubService.RegistUserDevice(appUser.UserData.UserId, appUser.DeviceToken, DeviceTokenExpireTime);
-                appUser.DeviceToken = deviceToken;
+                var suc = await ChicagoServer.BahamutPubSubService.RegistUserDeviceAsync(appUser.UserData.UserId, appUser.DeviceToken, DeviceTokenExpireTime);
+                if (suc)
+                {
+                    appUser.DeviceToken = deviceToken;
+                }
+                return suc;
             }
             catch (Exception)
             {
                 LogManager.GetLogger("Warn").Info("Regist Device Token Error:{0}", appUser.UserData.UserId);
+                return false;
             }
 
         }
 
-        public static DeviceToken GetUserDeviceToken(string userId)
+        public static async Task<DeviceToken> GetUserDeviceTokenAsync(string userId)
         {
             try
             {
-                return ChicagoServer.BahamutPubSubService.GetUserDeviceToken(userId, DeviceTokenExpireTime);
+                var tokenExpiry = await ChicagoServer.BahamutPubSubService.GetUserDeviceTokenWithExpiryAsync(userId);
+                if (tokenExpiry != null)
+                {
+                    if (tokenExpiry.Item2.TotalSeconds > 0)
+                    {
+                        if (tokenExpiry.Item2.TotalSeconds < DeviceTokenExpireTime.TotalSeconds * 0.1)
+                        {
+                            await ChicagoServer.BahamutPubSubService.ExpireUserDeviceTokenAsync(userId, DeviceTokenExpireTime);
+                        }
+                        return tokenExpiry.Item1;
+                    }
+                }
             }
             catch (Exception)
             {
-                LogManager.GetLogger("Warn").Info("Get Device Token Error:{0}", userId);
-                return null;
             }
+            LogManager.GetLogger("Warn").Info("Get Device Token Error:{0}", userId);
+            return null;
         }
-
     }
 }

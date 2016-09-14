@@ -64,7 +64,7 @@ namespace Chicago.Extension
             string userId = msg.UserId;
             Task.Run(async () =>
             {
-                var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
+                var result = await ChicagoServer.TokenService.ValidateAppTokenAsync(appkey, userId, appToken);
                 if (result != null)
                 {
                     var sharelinker = new BahamutAppUser()
@@ -127,7 +127,7 @@ namespace Chicago.Extension
             string userId = msg.UserId;
             Task.Run(async () =>
             {
-                var result = await ChicagoServer.TokenService.ValidateAppToken(appkey, userId, appToken);
+                var result = await ChicagoServer.TokenService.ValidateAppTokenAsync(appkey, userId, appToken);
                 if (result != null)
                 {
                     var sharelinker = new BahamutAppUser()

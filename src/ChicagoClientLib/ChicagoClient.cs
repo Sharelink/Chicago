@@ -86,17 +86,11 @@ namespace ChicagoClientLib
         }
     }
 
-
-    [Serializable]
     public class CSharpClientException : Exception
     {
         public CSharpClientException() { }
         public CSharpClientException(string message) : base(message) { }
         public CSharpClientException(string message, Exception inner) : base(message, inner) { }
-        protected CSharpClientException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context)
-        { }
     }
 
     public class JsonMessage : CSharpServerClientBaseMessage

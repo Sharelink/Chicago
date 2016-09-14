@@ -3,6 +3,10 @@
   "description": "Chicago Console Application",
 
   "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    },
     "BahamutService": "1.0.0-*",
     "CSharpServerFramework": "1.0.0-*",
     "CSharpServerFrameworkAbstract": "1.0.0-*",
@@ -10,8 +14,7 @@
     "Microsoft.Extensions.Configuration": "1.0.0-*",
     "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-    "System.Net.Http": "4.0.0"
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-*"
   },
 
   "commands": {
@@ -19,8 +22,7 @@
   },
 
   "frameworks": {
-    "net451": {
-    }
+    "netcoreapp1.0": {}
   },
 
   "buildOptions": {
@@ -28,5 +30,15 @@
     "preserveCompilationContext": true
   },
 
-  "runtimes": { "ubuntu.14.04-x64": {} }
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+
+  "runtimes": {
+    "ubuntu.14.04-x64": {},
+    "win10-x64": {},
+    "osx.10.11-x64": {}
+  }
 }

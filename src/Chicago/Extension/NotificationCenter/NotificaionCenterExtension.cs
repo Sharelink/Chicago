@@ -14,6 +14,9 @@ namespace Chicago.Extension
     public class NotificaionCenterExtension : JsonExtensionBase
     {
         private readonly string DEFAULT_NOTIFY_CMD = "BahamutNotify";
+        private readonly string NOTIFY_TYPE_REGIST_USER_DEVICE_TOKEN = "RegistUserDevice";
+        private readonly string NOTIFY_TYPE_REMOVE_USER_DEVICE_TOKEN = "RemoveUserDevice";
+
         public static NotificaionCenterExtension Instance { get; private set; }
         private BahamutUserManager userManager;
 
@@ -41,6 +44,13 @@ namespace Chicago.Extension
 
         private void SubscribeToPubSubSystem(string channel)
         {
+            var sub = ChicagoServer.BahamutPubSubService.CreateSubscription();
+            sub.SubscribeAsync(channel, (chel, value) =>
+            {
+                HandleSubscriptionMessage(chel, value);
+            });
+            #region ServiceStack
+            /*
             using (var subscription = ChicagoServer.BahamutPubSubService.CreateSubscription())
             {
                 subscription.OnUnSubscribe = appUniqueId =>
@@ -62,35 +72,40 @@ namespace Chicago.Extension
                     subscription.SubscribeToChannels(channel);
                 });
             };
+            */
+            #endregion
         }
 
         private void HandleSubscriptionMessage(string appUniqueId, string message)
         {
-            try
+            Task.Run(async () =>
             {
-                var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
-                if (msgModel.NotifyType == "RegistUserDevice")
+                try
                 {
-                    userManager.RegistDeviceToken(msgModel);
-                }else if(msgModel.NotifyType == "RemoveUserDevice")
-                {
-                    userManager.RemoveUser(msgModel);
+                    var msgModel = ChicagoServer.BahamutPubSubService.DeserializePublishMessage(message);
+                    if (msgModel.NotifyType == NOTIFY_TYPE_REGIST_USER_DEVICE_TOKEN)
+                    {
+                        await userManager.RegistDeviceTokenAsync(msgModel);
+                    }
+                    else if (msgModel.NotifyType == NOTIFY_TYPE_REMOVE_USER_DEVICE_TOKEN)
+                    {
+                        await userManager.RemoveUserAsync(msgModel);
+                    }
+                    else
+                    {
+                        HandleNotificationMessageAsync(appUniqueId, msgModel);
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    HandleNotificationMessage(appUniqueId, msgModel);
+                    LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", appUniqueId, message);
                 }
-            }
-            catch (Exception)
-            {
-                LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", appUniqueId, message);
-            }
+            });
         }
 
-        private void HandleNotificationMessage(string appUniqueId, BahamutPublishModel msgModel)
+        private async void HandleNotificationMessageAsync(string appUniqueId, BahamutPublishModel msgModel)
         {
-            var deviceToken = BahamutUserManager.GetUserDeviceToken(msgModel.ToUser);
-
+            var deviceToken = await BahamutUserManager.GetUserDeviceTokenAsync(msgModel.ToUser);
             if (deviceToken != null && deviceToken.IsValidToken())
             {
                 if (deviceToken.IsIOSDevice())
@@ -131,38 +146,38 @@ namespace Chicago.Extension
             this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
         }
 
-        private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken,  BahamutPublishModel model)
+        private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken, BahamutPublishModel model)
         {
-            try
+            Task.Run(() =>
             {
-                Task.Run(() =>
+                try
                 {
                     var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                     var umessageModel = Program.UMessageApps[appUniqueId];
                     UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
-                });
-            }
-            catch (Exception)
-            {
-                LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
-            }
+                }
+                catch (Exception)
+                {
+                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
+                }
+            });
         }
 
         private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, BahamutPublishModel model)
         {
-            try
+            Task.Run(() =>
             {
-                Task.Run(() =>
+                try
                 {
-					var umessageModel = Program.UMessageApps[appUniqueId];
-					var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
-                    UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS,umodel);
-                });
-            }
-            catch (Exception)
-            {
-                LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
-            }
+                    var umessageModel = Program.UMessageApps[appUniqueId];
+                    var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
+                    UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS, umodel);
+                }
+                catch (Exception)
+                {
+                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
+                }
+            });
         }
 
         public bool UnSubscribeChannel(string channel)
@@ -188,7 +203,10 @@ namespace Chicago.Extension
                 Token = msg.DeviceToken,
                 Type = msg.DeviceType
             };
-            userManager.UpdateUserDeviceToken(appUser, dt);
+            Task.Run(async () =>
+            {
+                await userManager.UpdateUserDeviceTokenAynce(appUser, dt);
+            });
         }
 
         public void RegistUser(string userId, ICSharpServerSession session)
