@@ -1,5 +1,4 @@
 ﻿using CSharpClientFramework;
-using CSharpClientFramework.Client;
 using CSServerJsonProtocol;
 using Newtonsoft.Json;
 using System;
@@ -77,9 +76,9 @@ namespace ChicagoClientLib
             var returnObj = JsonProtocolUtil.DeserializeMessage(0, Buffer, len);
             var jsonMsg = new JsonMessage()
             {
-                CommandId = route.CmdId,
-                Extension = route.ExtName,
-                CommandName = route.CmdName,
+                CmdId = route.CmdId,
+                ExtName = route.ExtName,
+                CmdName = route.CmdName,
                 Result = returnObj
             };
             return jsonMsg;
