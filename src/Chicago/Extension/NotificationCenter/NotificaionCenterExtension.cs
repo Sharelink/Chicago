@@ -7,6 +7,8 @@ using NLog;
 using BahamutService.Service;
 using Newtonsoft.Json;
 using BahamutService.Model;
+using System.Collections.Generic;
+using StackExchange.Redis;
 
 namespace Chicago.Extension
 {
@@ -19,17 +21,39 @@ namespace Chicago.Extension
 
         public static NotificaionCenterExtension Instance { get; private set; }
         private BahamutUserManager userManager;
+        private IDictionary<string, UMessageAppModel> UMessageApps { get; set; }
 
         public override void Init()
         {
             userManager = new BahamutUserManager();
             ChicagoServer.Instance.OnSessionDisconnected += OnSessionDisconnected;
             Instance = this;
-            foreach (var app in Program.NotifyApps)
-            {
-                SubscribeToPubSubSystem(app.Value);
-            }
+            LoadNotifyApps();
+        }
 
+        private void LoadNotifyApps()
+        {
+            UMessageApps = new Dictionary<string, UMessageAppModel>();
+            var apps = Program.Configuration.GetSection("NotifyApps").GetChildren();
+            foreach (var app in apps)
+            {
+                string appkey = app["appkey"];
+                string channel = Program.GetAppChannelByAppkey(appkey);
+                if (string.IsNullOrWhiteSpace(channel))
+                {
+                    LogManager.GetLogger("Warning").Warn("App Channel Not Found Of Appkey:{0}", appkey);
+                    continue;
+                }
+                UMessageApps.Add(channel, new UMessageAppModel
+                {
+                    AppkeyIOS = app["umessage:ios:appkey"],
+                    SecretIOS = app["umessage:ios:secret"],
+
+                    AppkeyAndroid = app["umessage:android:appkey"],
+                    SecretAndroid = app["umessage:android:secret"]
+                });
+                SubscribeToPubSubSystem(channel);
+            }
         }
 
         private void OnSessionDisconnected(object sender, CSServerEventArgs e)
@@ -42,41 +66,15 @@ namespace Chicago.Extension
             }
         }
 
-        private void SubscribeToPubSubSystem(string channel)
+        public async void SubscribeToPubSubSystem(string channel)
         {
-            var sub = ChicagoServer.BahamutPubSubService.CreateSubscription();
-            sub.SubscribeAsync(channel, (chel, value) =>
+            await ChicagoServer.BahamutPubSubService.SubscribeAsync(channel, (chel, value) =>
             {
                 HandleSubscriptionMessage(chel, value);
             });
-            #region ServiceStack
-            /*
-            using (var subscription = ChicagoServer.BahamutPubSubService.CreateSubscription())
-            {
-                subscription.OnUnSubscribe = appUniqueId =>
-                {
-                    LogManager.GetLogger("Info").Info("OnUnSubscribe:{0}", appUniqueId);
-                };
-
-                subscription.OnSubscribe = appUniqueId =>
-                {
-                    LogManager.GetLogger("Info").Info("OnSubscribe:{0}", appUniqueId);
-                };
-
-                subscription.OnMessage = (appUniqueId, message) =>
-                {
-                    HandleSubscriptionMessage(appUniqueId, message);
-                };
-                Task.Run(() =>
-                {
-                    subscription.SubscribeToChannels(channel);
-                });
-            };
-            */
-            #endregion
         }
 
-        private void HandleSubscriptionMessage(string appUniqueId, string message)
+        private void HandleSubscriptionMessage(string channel, string message)
         {
             Task.Run(async () =>
             {
@@ -93,33 +91,33 @@ namespace Chicago.Extension
                     }
                     else
                     {
-                        HandleNotificationMessageAsync(appUniqueId, msgModel);
+                        HandleNotificationMessageAsync(channel, msgModel);
                     }
                 }
                 catch (Exception)
                 {
-                    LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", appUniqueId, message);
+                    LogManager.GetLogger("Warn").Warn("App={0}:Handle Subscription Error:{1}", channel, message);
                 }
             });
         }
 
-        private async void HandleNotificationMessageAsync(string appUniqueId, BahamutPublishModel msgModel)
+        private async void HandleNotificationMessageAsync(string channel, BahamutPublishModel msgModel)
         {
             var deviceToken = await BahamutUserManager.GetUserDeviceTokenAsync(msgModel.ToUser);
             if (deviceToken != null && deviceToken.IsValidToken())
             {
                 if (deviceToken.IsIOSDevice())
                 {
-                    SendBahamutAPNSNotification(appUniqueId, deviceToken.Token, msgModel);
+                    SendBahamutAPNSNotification(channel, deviceToken.Token, msgModel);
                 }
                 else if (deviceToken.IsAndroidDevice())
                 {
-                    SendAndroidMessageToUMessage(appUniqueId, deviceToken.Token, msgModel);
+                    SendAndroidMessageToUMessage(channel, deviceToken.Token, msgModel);
                 }
             }
             else
             {
-                LogManager.GetLogger("Info").Warn("App={0}:User Not Regist DeviceToken:{1}", appUniqueId, msgModel.ToUser);
+                LogManager.GetLogger("Info").Warn("App={0}:User Not Regist DeviceToken:{1}", channel, msgModel.ToUser);
             }
         }
 
@@ -146,36 +144,36 @@ namespace Chicago.Extension
             this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
         }
 
-        private void SendAndroidMessageToUMessage(string appUniqueId, string deviceToken, BahamutPublishModel model)
+        private void SendAndroidMessageToUMessage(string appChannel, string deviceToken, BahamutPublishModel model)
         {
             Task.Run(() =>
             {
                 try
                 {
                     var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
-                    var umessageModel = Program.UMessageApps[appUniqueId];
+                    var umessageModel = UMessageApps[appChannel];
                     UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
                 }
                 catch (Exception)
                 {
-                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
+                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appChannel);
                 }
             });
         }
 
-        private void SendBahamutAPNSNotification(string appUniqueId, string deviceToken, BahamutPublishModel model)
+        private void SendBahamutAPNSNotification(string appChannel, string deviceToken, BahamutPublishModel model)
         {
             Task.Run(() =>
             {
                 try
                 {
-                    var umessageModel = Program.UMessageApps[appUniqueId];
+                    var umessageModel = UMessageApps[appChannel];
                     var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                     UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS, umodel);
                 }
                 catch (Exception)
                 {
-                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appUniqueId);
+                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appChannel);
                 }
             });
         }

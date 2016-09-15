@@ -1,7 +1,6 @@
 ﻿{
   "NotifyApps": [
     {
-      "uniqueId": "Xxx",
       "appkey": "***",
       "umessage": {
         "ios": {

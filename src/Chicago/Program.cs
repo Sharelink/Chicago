@@ -9,6 +9,7 @@ using CSharpServerFramework;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.IO;
+using NLog;
 
 namespace Chicago
 {
@@ -26,41 +27,10 @@ namespace Chicago
     {
         public static IConfiguration Configuration { get; private set; }
         public static ChicagoServer Server { get; private set; }
-        public static IDictionary<string, string> NotifyApps { get; private set; }
-        public static IDictionary<string, UMessageAppModel> UMessageApps { get; private set; }
-        private static void LoadNotifyApps()
+        
+        public static string GetAppChannelByAppkey(string appkey)
         {
-            UMessageApps = new Dictionary<string, UMessageAppModel>();
-            NotifyApps = new Dictionary<string, string>();
-            var apps = Program.Configuration.GetSection("NotifyApps").GetChildren();
-            foreach (var app in apps)
-            {
-                string key = app["appkey"];
-                string value = app["uniqueId"];
-                NotifyApps.Add(key, value);
-                UMessageApps.Add(value, new UMessageAppModel
-                {
-                    AppkeyIOS = app["umessage:ios:appkey"],
-                    SecretIOS = app["umessage:ios:secret"],
-
-                    AppkeyAndroid = app["umessage:android:appkey"],
-                    SecretAndroid = app["umessage:android:secret"]
-                });
-            }
-        }
-
-        public static string GetAppUniqueIdByAppkey(string appkey)
-        {
-
-            try
-            {
-                var id = NotifyApps[appkey];
-                return id;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return Configuration[string.Format("AppChannel:{0}:channel", appkey)];
         }
 
         public static void Main(string[] args)
@@ -80,9 +50,11 @@ namespace Chicago
             var baseConfig = baseConfigBuilder.Build();
             var logConfigFile = baseConfig["Data:LogConfig"];
             var notifyAppsConfigFile = baseConfig["Data:NotifyAppsConfig"];
+            var appChannelConfigFile = baseConfig["Data:AppChannelConfig"];
             baseConfigBuilder
                 .AddJsonFile(logConfigFile, true, true)
-                .AddJsonFile(notifyAppsConfigFile, true, true);
+                .AddJsonFile(notifyAppsConfigFile, true, true)
+                .AddJsonFile(appChannelConfigFile, true, true);
             Configuration = baseConfigBuilder.Build();
 
             //Nlog
@@ -92,11 +64,8 @@ namespace Chicago
 #if DEBUG
             BahamutCommon.LoggerLoaderHelper.AddConsoleLoggerToLogginConfig(nlogConfig);
 #endif
-            NLog.LogManager.Configuration = nlogConfig;
-
-            //Notify Apps
-            LoadNotifyApps();
-
+            LogManager.Configuration = nlogConfig;
+            
             try
             {
                 //CSServer
@@ -122,7 +91,7 @@ namespace Chicago
             }
             catch (Exception ex)
             {
-                NLog.LogManager.GetLogger("Chicago").Fatal(ex);
+                LogManager.GetLogger("Chicago").Fatal(ex);
                 throw;
             }
         }
