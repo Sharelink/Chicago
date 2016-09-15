@@ -87,7 +87,11 @@ namespace Chicago
                 server.UseExtension(notificationExt);
                 server.UseExtension(new HeartBeatExtension());
                 server.StartServer();
+#if DEBUG
+                DebugConsole();
+#else
                 Thread.Sleep(Timeout.Infinite);
+#endif          
             }
             catch (Exception ex)
             {
@@ -95,8 +99,31 @@ namespace Chicago
                 throw;
             }
         }
+
+        #region DebugConsole
+#if DEBUG
+        private static void DebugConsole()
+        {
+            var r = true;
+            while (r)
+            {
+                var line = Console.ReadLine();
+                switch (line.ToLower())
+                {
+                    case "exit": r = false; break;
+                    case "t":break;
+                    default:
+                        break;
+                }
+            }
+            
+        }
+#endif
+        #endregion
+
     }
 
+    #region Chicago Server Config Reader
     class ServerConfigReader : IGetServerConfig
     {
         public uint GetBufferAddPerTimeCount()
@@ -156,4 +183,6 @@ namespace Chicago
             
         }
     }
+    #endregion
+
 }

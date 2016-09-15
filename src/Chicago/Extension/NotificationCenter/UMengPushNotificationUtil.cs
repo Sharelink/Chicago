@@ -28,7 +28,7 @@ namespace Chicago.Extension
             var p = new
             {
                 appkey = appkey,
-                timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now),
+                timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceToken,
                 type = "unicast",
 				#if DEBUG
@@ -56,7 +56,7 @@ namespace Chicago.Extension
             var p = new
             {
                 appkey = appkey,
-                timestamp = BahamutCommon.DateTimeUtil.ConvertDateTimeSecondInt(DateTime.Now),
+                timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceToken,
                 type = "unicast",
 				#if DEBUG
@@ -77,7 +77,7 @@ namespace Chicago.Extension
             PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        private static void PushNotifyToUMessage(string deviceToken, string app_master_secret, object msgParams)
+        public static void PushNotifyToUMessage(string deviceToken, string app_master_secret, object msgParams)
         {
             Task.Run(async () =>
             {
