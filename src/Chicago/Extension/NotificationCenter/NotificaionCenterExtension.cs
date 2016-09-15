@@ -117,7 +117,7 @@ namespace Chicago.Extension
             }
             else
             {
-                LogManager.GetLogger("Info").Warn("App={0}:User Not Regist DeviceToken:{1}", channel, msgModel.ToUser);
+                LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", channel, msgModel.ToUser);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Chicago.Extension
                 }
                 catch (Exception)
                 {
-                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appChannel);
+                    LogManager.GetLogger("Warn").Warn("No App Regist:{0}", appChannel);
                 }
             });
         }
@@ -173,7 +173,7 @@ namespace Chicago.Extension
                 }
                 catch (Exception)
                 {
-                    LogManager.GetLogger("Info").Info("No App Regist:{0}", appChannel);
+                    LogManager.GetLogger("Warn").Warn("No App Regist:{0}", appChannel);
                 }
             });
         }

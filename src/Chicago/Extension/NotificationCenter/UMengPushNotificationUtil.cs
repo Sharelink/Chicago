@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -76,21 +77,28 @@ namespace Chicago.Extension
             PushNotifyToUMessage(deviceToken, app_master_secret, p);
         }
 
-        private static async void PushNotifyToUMessage(string deviceToken, string app_master_secret, object msgParams)
+        private static void PushNotifyToUMessage(string deviceToken, string app_master_secret, object msgParams)
         {
-            var method = "POST";
-            var url = "http://msg.umeng.com/api/send";
-            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams).Replace("loc_key", "loc-key");
-
-            var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
-            var client = new HttpClient();
-            var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
-            var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
-            var result = await msg.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(result) || !result.Contains("SUCCESS"))
+            Task.Run(async () =>
             {
-                LogManager.GetLogger("Warn").Info("Push UMeng Message:" + result);
-            }
+                var method = "POST";
+                var url = "http://msg.umeng.com/api/send";
+                var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams).Replace("loc_key", "loc-key");
+                var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
+                var client = new HttpClient();
+                var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
+                var msg = await client.PostAsync(uri, new StringContent(post_body, System.Text.Encoding.UTF8, "application/json"));
+                var result = await msg.Content.ReadAsStringAsync();
+                if (string.IsNullOrWhiteSpace(result) || !result.Contains("SUCCESS"))
+                {
+                    LogManager.GetLogger("Warn").Info("UMSG:{0}", result);
+                }
+                else
+                {
+                    LogManager.GetLogger("Info").Info("UMSG:{0}", result);
+                }
+            });
+            
         }
     }
 }
