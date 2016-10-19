@@ -104,40 +104,40 @@ namespace Chicago.Extension
 
         private async void HandleNotificationMessageAsync(string channel, BahamutPublishModel msgModel)
         {
-            var iosTokens = "";
-            var androidTokens = "";
+            string iosTokens = null;
+            string androidTokens = null;
             if (msgModel.ToUser.Contains(","))
             {
+                var iosTokensBuilder = new StringBuilder();
+                var androidTokensBuilder = new StringBuilder();
                 var userIds = msgModel.ToUser.Split(new char[]{','});
-                LogManager.GetLogger("Info").Info("Device Tokens:{0}",userIds.Length);
-                var deviceTokens = await BahamutUserManager.GetUsersDeviceTokensAsync(userIds);
-                var iosDTs = new List<string>();
-                var andDTs = new List<string>();
+                var deviceTokens = await ChicagoServer.BahamutPubSubService.GetUserDeviceTokensAsync(userIds);
                 foreach (var dt in deviceTokens)
                 {
-                    LogManager.GetLogger("Info").Info("Device Tokens:{0},{1}",dt.Type,dt.Token);
                     if (dt.IsIOSDevice())
                     {
-                        iosDTs.Append(dt.Token);
+                        if(iosTokensBuilder.Length > 0)
+                        {
+                            iosTokensBuilder.Append(',');
+                        }
+                        iosTokensBuilder.Append(dt.Token);
                     }
                     else if (dt.IsAndroidDevice())
                     {
-                        andDTs.Append(dt.Token);
+                        if (androidTokensBuilder.Length > 0)
+                        {
+                            androidTokensBuilder.Append(',');
+                        }
+                        androidTokensBuilder.Append(dt.Token);
                     }
                 }
-                if (iosDTs.Count > 0)
-                {
-                    iosTokens = string.Join(",", iosDTs);
-                }
-                if (andDTs.Count > 0)
-                {
-                    androidTokens = string.Join(",", andDTs);
-                }
+                iosTokens = iosTokensBuilder.ToString();
+                androidTokens = androidTokensBuilder.ToString();
             }
             else
             {
                 var deviceToken = await BahamutUserManager.GetUserDeviceTokenAsync(msgModel.ToUser);
-                if (deviceToken != null && deviceToken.IsValidToken())
+                if (deviceToken != null)
                 {
                     if (deviceToken.IsIOSDevice())
                     {
@@ -156,13 +156,11 @@ namespace Chicago.Extension
             
             if(!string.IsNullOrWhiteSpace(iosTokens))
             {
-                LogManager.GetLogger("Info").Info("Send iOS Nofity To Tokens:{0}",iosTokens);
                 SendBahamutAPNSNotification(channel, iosTokens, msgModel);
             }
 
             if(!string.IsNullOrWhiteSpace(androidTokens))
             {
-                LogManager.GetLogger("Info").Info("Send Android Nofity To Tokens:{0}",androidTokens);
                 SendAndroidMessageToUMessage(channel, androidTokens, msgModel);
             }
 

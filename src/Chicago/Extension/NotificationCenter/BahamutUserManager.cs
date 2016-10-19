@@ -73,10 +73,5 @@ namespace Chicago.Extension
             LogManager.GetLogger("Warn").Info("Get Device Token Error:{0}", userId);
             return null;
         }
-
-        public static async Task<IEnumerable<DeviceToken>> GetUsersDeviceTokensAsync(IEnumerable<string> userIds)
-        {
-            return await ChicagoServer.BahamutPubSubService.GetUserDeviceTokensAsync(userIds);
-        }
     }
 }
