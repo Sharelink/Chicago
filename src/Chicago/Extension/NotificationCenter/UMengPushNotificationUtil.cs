@@ -22,15 +22,15 @@ namespace Chicago.Extension
 
     public class UMengPushNotificationUtil
     {
-
-        public static void PushAndroidNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
+        public static void PushAndroidNotifyToUMessage(string deviceTokens, string appkey, string app_master_secret, UMengMessageModel model)
         {
+            var type = deviceTokens.Contains(",") ? "listcast":"unicast";
             var p = new
             {
                 appkey = appkey,
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
-                device_tokens = deviceToken,
-                type = "unicast",
+                device_tokens = deviceTokens,
+                type = type,
 				#if DEBUG
 					production_mode = "false",
 				#endif
@@ -48,17 +48,18 @@ namespace Chicago.Extension
                     display_type = "notification"
                 }
             };
-            PushNotifyToUMessage(deviceToken, app_master_secret, p);
+            PushNotifyToUMessage(app_master_secret, p);
         }
 
-        public static void PushAPNSNotifyToUMessage(string deviceToken, string appkey, string app_master_secret, UMengMessageModel model)
+        public static void PushAPNSNotifyToUMessage(string deviceTokens, string appkey, string app_master_secret, UMengMessageModel model)
         {
+            var type = deviceTokens.Contains(",") ? "listcast":"unicast";
             var p = new
             {
                 appkey = appkey,
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
-                device_tokens = deviceToken,
-                type = "unicast",
+                device_tokens = deviceTokens,
+                type = type,
 				#if DEBUG
 					production_mode = "false",
 				#endif
@@ -74,10 +75,10 @@ namespace Chicago.Extension
                 }
 				
             };
-            PushNotifyToUMessage(deviceToken, app_master_secret, p);
+            PushNotifyToUMessage(app_master_secret, p);
         }
 
-        public static void PushNotifyToUMessage(string deviceToken, string app_master_secret, object msgParams)
+        public static void PushNotifyToUMessage(string app_master_secret, object msgParams)
         {
             Task.Run(async () =>
             {
