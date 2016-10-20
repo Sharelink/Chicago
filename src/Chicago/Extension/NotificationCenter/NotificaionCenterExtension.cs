@@ -121,12 +121,12 @@ namespace Chicago.Extension
             {
                 if (!string.IsNullOrWhiteSpace(token.iOsDeviceTokens))
                 {
-                    SendBahamutAPNSNotification(channel, token.iOsDeviceTokens, msgModel);
+                    await SendBahamutAPNSNotification(channel, token.iOsDeviceTokens, msgModel);
                 }
 
                 if (!string.IsNullOrWhiteSpace(token.iOsDeviceTokens))
                 {
-                    SendAndroidMessageToUMessage(channel, token.iOsDeviceTokens, msgModel);
+                    await SendAndroidMessageToUMessage(channel, token.iOsDeviceTokens, msgModel);
                 }
             }
 
@@ -234,13 +234,13 @@ namespace Chicago.Extension
             this.SendJsonResponse(registedUser.Session, resObj, ExtensionName, cmd);
         }
 
-        private void SendAndroidMessageToUMessage(string appChannel, string deviceToken, BahamutPublishModel model)
+        private async Task SendAndroidMessageToUMessage(string appChannel, string deviceToken, BahamutPublishModel model)
         {
             try
             {
                 var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                 var umessageModel = UMessageApps[appChannel];
-                UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
+                await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
             }
             catch (Exception)
             {
@@ -248,13 +248,13 @@ namespace Chicago.Extension
             }
         }
 
-        private void SendBahamutAPNSNotification(string appChannel, string deviceToken, BahamutPublishModel model)
+        private async Task SendBahamutAPNSNotification(string appChannel, string deviceToken, BahamutPublishModel model)
         {
             try
             {
                 var umessageModel = UMessageApps[appChannel];
                 var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
-                UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS, umodel);
+                await UMengPushNotificationUtil.PushAPNSNotifyToUMessage(deviceToken, umessageModel.AppkeyIOS, umessageModel.SecretIOS, umodel);
             }
             catch (Exception)
             {
