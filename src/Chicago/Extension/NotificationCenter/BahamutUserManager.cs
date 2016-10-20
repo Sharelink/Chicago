@@ -23,6 +23,8 @@ namespace Chicago.Extension
                 Token = msg.DeviceToken,
                 Type = msg.DeviceType
             };
+            string accountid = msg.AccountId;
+            LogManager.GetLogger("Info").Info("Regist {0} Device Of Account:{1}",dt.Type, accountid);
             return await ChicagoServer.BahamutPubSubService.RegistUserDeviceAsync(msgModel.ToUser, dt, DeviceTokenExpireTime);
         }
 

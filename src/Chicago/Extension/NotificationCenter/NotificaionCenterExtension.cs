@@ -119,14 +119,14 @@ namespace Chicago.Extension
                 LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", channel, msgModel.ToUser);
             }else
             {
-                if (!string.IsNullOrWhiteSpace(token.iOsDeviceTokens))
+                if (!string.IsNullOrWhiteSpace(token.iOSDeviceTokens))
                 {
-                    await SendBahamutAPNSNotification(channel, token.iOsDeviceTokens, msgModel);
+                    await SendBahamutAPNSNotification(channel, token.iOSDeviceTokens, msgModel);
                 }
 
-                if (!string.IsNullOrWhiteSpace(token.iOsDeviceTokens))
+                if (!string.IsNullOrWhiteSpace(token.AndroidDeviceTokens))
                 {
-                    await SendAndroidMessageToUMessage(channel, token.iOsDeviceTokens, msgModel);
+                    await SendAndroidMessageToUMessage(channel, token.AndroidDeviceTokens, msgModel);
                 }
             }
 
@@ -135,7 +135,7 @@ namespace Chicago.Extension
         class TypedDeviceTokens
         {
             public string AndroidDeviceTokens { get; set; }
-            public string iOsDeviceTokens { get; set; }
+            public string iOSDeviceTokens { get; set; }
         }
 
         private async Task<TypedDeviceTokens> GetSingleUserDeviceToken(string toUser)
@@ -146,7 +146,7 @@ namespace Chicago.Extension
             {
                 if (deviceToken.IsIOSDevice())
                 {
-                    result.iOsDeviceTokens = deviceToken.Token;
+                    result.iOSDeviceTokens = deviceToken.Token;
                 }
                 else if (deviceToken.IsAndroidDevice())
                 {
@@ -196,7 +196,7 @@ namespace Chicago.Extension
                         LogManager.GetLogger("Info").Info("Unsupport Type Notification:{0}", dt.Token);
                     }
                 }
-                result.iOsDeviceTokens = iosTokensBuilder.ToString();
+                result.iOSDeviceTokens = iosTokensBuilder.ToString();
                 result.AndroidDeviceTokens = androidTokensBuilder.ToString();
             }
             catch (System.Exception e)
@@ -204,7 +204,7 @@ namespace Chicago.Extension
                 LogManager.GetLogger("Warn").Warn("Mutil Notification Exception:{0}", e.ToString());
                 return null;
             }
-            if(string.IsNullOrWhiteSpace(result.AndroidDeviceTokens) && string.IsNullOrWhiteSpace(result.iOsDeviceTokens))
+            if(string.IsNullOrWhiteSpace(result.AndroidDeviceTokens) && string.IsNullOrWhiteSpace(result.iOSDeviceTokens))
             {
                 return null;
             }
