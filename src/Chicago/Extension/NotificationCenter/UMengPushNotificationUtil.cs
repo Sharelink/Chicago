@@ -18,6 +18,8 @@ namespace Chicago.Extension
         public string Custom { get; set; }
         public int BuilderId { get; set; }
         public string LocKey { get; set; }
+
+        public object Extra { get; set; }
     }
 
     public class UMengPushNotificationUtil
@@ -45,6 +47,7 @@ namespace Chicago.Extension
                         custom = model.Custom,
                         builder_id = model.BuilderId
                     },
+                    extra = model.Extra,
                     display_type = "notification"
                 }
             };
@@ -78,11 +81,17 @@ namespace Chicago.Extension
             await PushNotifyToUMessage(app_master_secret, p);
         }
 
+        private static Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings
+        {
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+            Formatting = Newtonsoft.Json.Formatting.None
+        };
+
         public static async Task PushNotifyToUMessage(string app_master_secret, object msgParams)
         {
             var method = "POST";
             var url = "http://msg.umeng.com/api/send";
-            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams).Replace("loc_key", "loc-key");
+            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams, JsonSerializerSettings).Replace("loc_key", "loc-key");
             var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
             var client = new HttpClient();
             var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
