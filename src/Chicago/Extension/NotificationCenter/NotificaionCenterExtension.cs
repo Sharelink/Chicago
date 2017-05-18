@@ -240,6 +240,7 @@ namespace Chicago.Extension
             {
                 var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                 var umessageModel = UMessageApps[appChannel];
+                
                 await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
             }
             catch (Exception)
