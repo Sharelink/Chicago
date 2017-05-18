@@ -20,6 +20,8 @@ namespace Chicago.Extension
         public string LocKey { get; set; }
 
         public object Extra { get; set; }
+
+        public string ProductMode { get; set; }
     }
 
     public class UMengPushNotificationUtil
@@ -33,9 +35,7 @@ namespace Chicago.Extension
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceTokens,
                 type = type,
-#if DEBUG
-                production_mode = "false",
-#endif
+                production_mode = string.IsNullOrWhiteSpace(model.ProductMode) ? "true" : model.ProductMode,
                 payload = new
                 {
                     body = new
@@ -63,16 +63,15 @@ namespace Chicago.Extension
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceTokens,
                 type = type,
-#if DEBUG
-                production_mode = "false",
-#endif
+                production_mode = string.IsNullOrWhiteSpace(model.ProductMode) ? "true" : model.ProductMode,
                 payload = new
                 {
                     aps = new
                     {
                         alert = new { loc_key = model.LocKey },
                         badge = 1,
-                        sound = "default"
+                        sound = "default",
+                        content_available = 1
                     },
                     custom = model.Custom
                 }
@@ -91,7 +90,8 @@ namespace Chicago.Extension
         {
             var method = "POST";
             var url = "http://msg.umeng.com/api/send";
-            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams, JsonSerializerSettings).Replace("loc_key", "loc-key");
+            var post_body = Newtonsoft.Json.JsonConvert.SerializeObject(msgParams, JsonSerializerSettings)
+            .Replace("loc_key", "loc-key").Replace("content_available", "content-available");
             var sign = MD5.ComputeMD5Hash(string.Format("{0}{1}{2}{3}", method, url, post_body, app_master_secret));
             var client = new HttpClient();
             var uri = new Uri(string.Format("{0}?sign={1}", url, sign));
