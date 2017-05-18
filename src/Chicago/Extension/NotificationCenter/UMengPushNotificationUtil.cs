@@ -21,7 +21,7 @@ namespace Chicago.Extension
 
         public object Extra { get; set; }
 
-        public string ProductMode { get; set; }
+        public string ProductionMode { get; set; }
     }
 
     public class UMengPushNotificationUtil
@@ -35,7 +35,7 @@ namespace Chicago.Extension
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceTokens,
                 type = type,
-                production_mode = string.IsNullOrWhiteSpace(model.ProductMode) ? "true" : model.ProductMode,
+                production_mode = string.IsNullOrWhiteSpace(model.ProductionMode) ? "true" : model.ProductionMode,
                 payload = new
                 {
                     body = new
@@ -63,7 +63,7 @@ namespace Chicago.Extension
                 timestamp = (long)BahamutCommon.DateTimeUtil.UnixTimeSpan.TotalSeconds,
                 device_tokens = deviceTokens,
                 type = type,
-                production_mode = string.IsNullOrWhiteSpace(model.ProductMode) ? "true" : model.ProductMode,
+                production_mode = string.IsNullOrWhiteSpace(model.ProductionMode) ? "true" : model.ProductionMode,
                 payload = new
                 {
                     aps = new
