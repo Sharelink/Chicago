@@ -72,7 +72,8 @@ namespace Chicago.Extension
         {
             await ChicagoServer.BahamutPubSubService.SubscribeAsync(channel, (chel, value) =>
             {
-                Task.Run(async ()=>{
+                Task.Run(async () =>
+                {
                     await HandleSubscriptionMessage(chel, value);
                 });
             });
@@ -108,17 +109,18 @@ namespace Chicago.Extension
             if (msgModel.ToUser.Contains(","))
             {
                 var userIds = msgModel.ToUser.Split(new char[] { ',' });
-                token = await GetMultiUserDeviceTokens(userIds);
+                token = await GetMultiUserDeviceTokens(msgModel.Appkey, userIds);
             }
             else
             {
-                token = await GetSingleUserDeviceToken(msgModel.ToUser);
+                token = await GetSingleUserDeviceToken(msgModel.Appkey, msgModel.ToUser);
             }
 
             if (token == null)
             {
                 LogManager.GetLogger("Warn").Warn("App={0}:User Not Regist DeviceToken:{1}", channel, msgModel.ToUser);
-            }else
+            }
+            else
             {
                 if (!string.IsNullOrWhiteSpace(token.iOSDeviceTokens))
                 {
@@ -139,10 +141,10 @@ namespace Chicago.Extension
             public string iOSDeviceTokens { get; set; }
         }
 
-        private async Task<TypedDeviceTokens> GetSingleUserDeviceToken(string toUser)
+        private async Task<TypedDeviceTokens> GetSingleUserDeviceToken(string appkey, string toUser)
         {
             var result = new TypedDeviceTokens();
-            var deviceToken = await BahamutUserManager.GetUserDeviceTokenAsync(toUser);
+            var deviceToken = await BahamutUserManager.GetUserDeviceTokenAsync(appkey, toUser);
             if (deviceToken != null)
             {
                 if (deviceToken.IsIOSDevice())
@@ -152,25 +154,27 @@ namespace Chicago.Extension
                 else if (deviceToken.IsAndroidDevice())
                 {
                     result.AndroidDeviceTokens = deviceToken.Token;
-                }else
+                }
+                else
                 {
                     return null;
                 }
                 return result;
-            }else
+            }
+            else
             {
                 return null;
             }
         }
 
-        private async Task<TypedDeviceTokens> GetMultiUserDeviceTokens(string[] userIds)
+        private async Task<TypedDeviceTokens> GetMultiUserDeviceTokens(string appkey, string[] userIds)
         {
             var result = new TypedDeviceTokens();
             try
             {
                 var iosTokensBuilder = new StringBuilder();
                 var androidTokensBuilder = new StringBuilder();
-                var deviceTokens = await ChicagoServer.BahamutPubSubService.GetUserDeviceTokensAsync(userIds);
+                var deviceTokens = await ChicagoServer.BahamutPubSubService.GetUserDeviceTokensAsync(appkey, userIds);
                 var iosSeparator = "";
                 var andSeparator = "";
                 LogManager.GetLogger("Info").Info("Mutil User Notification:{0}", deviceTokens.Count());
@@ -205,7 +209,7 @@ namespace Chicago.Extension
                 LogManager.GetLogger("Warn").Warn("Mutil Notification Exception:{0}", e.ToString());
                 return null;
             }
-            if(string.IsNullOrWhiteSpace(result.AndroidDeviceTokens) && string.IsNullOrWhiteSpace(result.iOSDeviceTokens))
+            if (string.IsNullOrWhiteSpace(result.AndroidDeviceTokens) && string.IsNullOrWhiteSpace(result.iOSDeviceTokens))
             {
                 return null;
             }
@@ -241,7 +245,7 @@ namespace Chicago.Extension
             {
                 var umodel = JsonConvert.DeserializeObject<UMengMessageModel>(model.NotifyInfo);
                 var umessageModel = UMessageApps[appChannel];
-                
+
                 await UMengPushNotificationUtil.PushAndroidNotifyToUMessage(deviceToken, umessageModel.AppkeyAndroid, umessageModel.SecretAndroid, umodel);
             }
             catch (Exception)
@@ -289,7 +293,7 @@ namespace Chicago.Extension
             };
             Task.Run(async () =>
             {
-                await userManager.UpdateUserDeviceTokenAynce(appUser, dt);
+                await userManager.UpdateUserDeviceTokenAynce(appUser.UserData.Appkey, appUser, dt);
             });
         }
 
@@ -304,5 +308,5 @@ namespace Chicago.Extension
             return false;
         }
     }
-        
+
 }
